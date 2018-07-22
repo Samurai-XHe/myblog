@@ -2,16 +2,60 @@
 {% load staticfiles %}
 {% block title %}{{ blog.title }}{% endblock %}
 {% block blog_active %}active{% endblock %}
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'blog/blog.css' %}">
+{% endblock %}
 
 {% block content %}
     <div class="container" style="margin-top: 10px">
         <div class="row">
-            <div class="blog">
+            <div class="panel panel-default">
+              <div class="panel-body">
+                <div class="blog">
                 <h3>{{ blog.title }}</h3>
-                <p>分类：{{ blog.blog_type.type_name }} &nbsp;作者：{{ blog.author }}&nbsp; 发布日期：{{ blog.created_time }}</p>
-                <p>评论（） 阅读（）</p>
-                <p>{{ blog.content }}</p>
+                <p class="blog_title_bottom">
+                    <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+                    {{ blog.blog_type.type_name }}&nbsp;&nbsp;&nbsp;作者：{{ blog.author }}
+                </p>
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <p>
+                            {{ blog.content }}
+                        </p>
+                    </div>
 
+                </div>
+                <p>
+                    发布日期：{{ blog.created_time }}&nbsp;&nbsp;&nbsp;
+                    评论（）&nbsp;&nbsp;阅读（）
+                </p>
             </div>
+              </div>
+            </div>
+        </div>
+        <div class="blog_more">
+            <nav aria-label="...">
+                <ul class="pager">
+                    {% if previous_page %}
+                      <li class="previous">
+                          <a href="{% url 'blog_detail' previous_page.pk %}">
+                              <span aria-hidden="true">&larr;</span> {{ previous_page.title }}
+                          </a>
+                      </li>
+                    {% else %}
+                      <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> 没有了</a></li>
+                    {% endif %}
+                    {% if next_page %}
+                        <li class="next">
+                            <a href="{% url 'blog_detail' next_page.pk %}"> {{ next_page.title }}
+                                <span aria-hidden="true">&rarr;</span>
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="next"><a href="#">没有了 <span aria-hidden="true">&rarr;</span></a></li>
+                    {% endif %}
+              </ul>
+            </nav>
+        </div>
     </div>
 {% endblock %}

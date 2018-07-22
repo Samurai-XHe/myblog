@@ -1,5 +1,6 @@
-div.blog:not(:last-child) {
-    margin-bottom: 2em;
-    padding-bottom: 1em;
-    border-bottom: 1px solid #eee;
+div.blog h3 {
+    text-align: center;
+}
+div.blog p.blog_title_bottom {
+    text-align: center;
 }
