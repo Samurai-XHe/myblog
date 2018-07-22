@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}" rel="stylesheet">
+    <script src="{% static 'jQuery v1.12.4.min.js' %}"></script>
+    <script src="{% static 'bootstrap-3.3.7/js/bootstrap.min.js' %}"></script>
+    {% block head_extends %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="page-header" style="border-bottom:0px">
+              <h1>第一次写网站我好紧张啊 <small></small></h1>
+            </div>
+        </div>
+        <div class="row">
+            <ul class="nav nav-tabs">
+              <li role="presentation" class="{% block home_active %}{% endblock %}"><a href="{% url 'index' %}">首页</a></li>
+              <li role="presentation" class="{% block blog_active %}{% endblock %}"><a href="{% url 'blog_list' %}">博客</a></li>
+              <li role="presentation" class="{% block beautiful_picture_active %}{% endblock %}"><a href="#">美图</a></li>
+            </ul>
+        </div>
+
+    </div>
+    {% block content %}{% endblock %}
+</body>
+</html>

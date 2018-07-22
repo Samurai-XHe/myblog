@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}这里是博客列表{% endblock %}
+{% block blog_active %}active{% endblock %}
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'blog/blog.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container" style="margin-top: 10px">
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">博客列表</div>
+                    <div class="panel-body">
+                        {% for blog in page_of_blogs %}
+                            <div class="blog">
+                                <a href="{% url 'blog_detail' blog.pk %}"><h3>{{ blog.title }}</h3></a>
+                                <p>分类：{{ blog.blog_type.type_name }}</p>
+                                <p>{{ blog.content|truncatechars:50 }}</p>
+                                <p>{{ blog.author }} 发布于 {{ blog.created_time }} 评论（） 阅读（）</p>
+                        </div>
+                        {% empty %}
+                            <div class="blog">
+                                <h3>暂无博客</h3>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+        </div>
+    </div>
+{% endblock %}
