@@ -9,3 +9,11 @@ div.blog h3 {
 div.paginator {
     text-align: center;
 }
+
+ul.blog-type {
+    list-style-type: none;
+}
+
+
+
+

@@ -7,8 +7,13 @@ def base_data():
     pass
 
 def blog_list(request):
-    page = int(request.GET.get('page',1))
+    try:
+        page = int(request.GET.get('page',1))
+    except Exception as e:
+        page = 1
     blogs = Blog.objects.all()
+
+    # 分页器
     paginator = Paginator(blogs,settings.CONTENT_OF_EACH_PAGE)
     if page > paginator.num_pages or page < 1:
         page = 1
@@ -25,7 +30,10 @@ def blog_list(request):
         page_range.insert(0,1)
     if page_range[-1] == '...':
         page_range.append(paginator.num_pages)
+
+    blog_types = BlogType.objects.all()
     context = {}
+    context['blog_types'] = blog_types
     context['page_range'] = page_range
     context['page_of_blogs'] = page_of_blogs
     return render(request,'blog/blog_list.html',context)

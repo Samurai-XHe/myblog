@@ -12,23 +12,27 @@
             <div class="panel panel-default">
               <div class="panel-body">
                 <div class="blog">
-                <h3>{{ blog.title }}</h3>
-                <p class="blog_title_bottom">
-                    <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
-                    {{ blog.blog_type.type_name }}&nbsp;&nbsp;&nbsp;作者：{{ blog.author }}
-                </p>
+                    <div class="blog_title">
+                        <h3>{{ blog.title }}</h3>
+                        <p class="blog_title_bottom">
+                            <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+                            {{ blog.blog_type.type_name }}&nbsp;&nbsp;&nbsp;作者：{{ blog.author }}
+                        </p>
+                    </div>
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
-                        <p>
+                        <p class="blog_content">
                             {{ blog.content }}
                         </p>
                     </div>
 
                 </div>
-                <p>
-                    发布日期：{{ blog.created_time }}&nbsp;&nbsp;&nbsp;
-                    评论（）&nbsp;&nbsp;阅读（）
-                </p>
+                <div class="blog_bottom">
+                    <p class="pull-right">
+                        发布日期：{{ blog.created_time }}&nbsp;&nbsp;&nbsp;
+                        评论（）&nbsp;&nbsp;阅读（）
+                    </p>
+                </div>
             </div>
               </div>
             </div>

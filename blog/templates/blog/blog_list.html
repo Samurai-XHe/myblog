@@ -9,61 +9,87 @@
 {% block content %}
     <div class="container" style="margin-top: 10px">
         <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">博客列表</div>
-                <div class="panel-body">
-                    {% for blog in page_of_blogs %}
-                        <div class="blog">
-                            <h3><a href="{% url 'blog_detail' blog.pk %}">{{ blog.title }}</a></h3>
-                            <p>
-                                <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
-                                {{ blog.blog_type.type_name }}
-                            </p>
-                            <p>{{ blog.content|truncatechars:50 }}</p>
-                            <p>{{ blog.author }} 发布于 {{ blog.created_time }} 评论（） 阅读（）</p>
+            <div class="col-md-10">
+                <div class="panel panel panel-primary">
+                    <div class="panel-heading">博客列表</div>
+                    <div class="panel-body">
+                        {% for blog in page_of_blogs %}
+                            <div class="blog">
+                                <h3><a href="{% url 'blog_detail' blog.pk %}">{{ blog.title }}</a></h3>
+                                <p>
+                                    <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+                                    {{ blog.blog_type.type_name }}
+                                </p>
+                                <p>{{ blog.content|truncatechars:50 }}</p>
+                                <p>{{ blog.author }} 发布于 {{ blog.created_time }} 评论（） 阅读（）</p>
+                            </div>
+                        {% empty %}
+                            <div class="blog">
+                                <h3>暂无博客</h3>
+                            </div>
+                        {% endfor %}
                     </div>
-                    {% empty %}
-                        <div class="blog">
-                            <h3>暂无博客</h3>
-                        </div>
-                    {% endfor %}
                 </div>
             </div>
-            <!-- 这里是分页器 -->
-            <div class="paginator">
-                <nav aria-label="Page navigation">
-                    <ul class="pagination">
-                        <li>
-                            {% if page_of_blogs.has_previous %}
-                                <a href="{% url 'blog_list' %}?page={{ page_of_blogs.previous_page_number }}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
-                                </a>
-                            {% else %}
-                                <span aria-hidden="true">&laquo;</span>
-                            {% endif %}
-                        </li>
-                            {% for page_num in page_range %}
-                                {% if page_num == '...' %}
-                                    <li><span>{{ page_num }}</span></li>
-                                {% elif page_num == page_of_blogs.number %}
-                                    <li class="active"><span>{{ page_num }}</span></li>
-                                {% else %}
-                                    <li><a href="{% url 'blog_list' %}?page={{ page_num }}">{{ page_num }}</a></li>
-                                {% endif %}
+            <div class="col-md-2">
+                <div class="panel panel-info">
+                    <div class="panel-heading">博客分类</div>
+                    <div class="panel-body">
+                        <ul class="blog-type">
+                            {% for blog_type in blog_types %}
+                               <li>
+                                   <a href="">
+                                       {{ blog_type.type_name }}
+                                   </a>
+                               </li>
+                            {% empty %}
+                                <li>暂无分类</li>
                             {% endfor %}
-                        <li>
-                            {% if page_of_blogs.has_next %}
-                                {# 前面的路径可以省略 #}
-                                <a href="?page={{ page_of_blogs.next_page_number }}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
-                                </a>
-                            {% else %}
-                                <span aria-hidden="true">&raquo;</span>
-                            {% endif %}
-                        </li>
-                    </ul>
-                </nav>
+                        </ul>
+                    </div>
+                </div>
+                <div class="panel panel panel-warning">
+                    <div class="panel-heading">日期归档</div>
+                    <div class="panel-body">
+                    Panel content
+                    </div>
+                </div>
             </div>
+        </div>
+        <!-- 这里是分页器 -->
+        <div class="paginator">
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    <li>
+                        {% if page_of_blogs.has_previous %}
+                            <a href="{% url 'blog_list' %}?page={{ page_of_blogs.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        {% else %}
+                            <span aria-hidden="true">&laquo;</span>
+                        {% endif %}
+                    </li>
+                        {% for page_num in page_range %}
+                            {% if page_num == '...' %}
+                                <li><span>{{ page_num }}</span></li>
+                            {% elif page_num == page_of_blogs.number %}
+                                <li class="active"><span>{{ page_num }}</span></li>
+                            {% else %}
+                                <li><a href="{% url 'blog_list' %}?page={{ page_num }}">{{ page_num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                    <li>
+                        {% if page_of_blogs.has_next %}
+                            {# 前面的路径可以省略 #}
+                            <a href="?page={{ page_of_blogs.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        {% else %}
+                            <span aria-hidden="true">&raquo;</span>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 {% endblock %}
