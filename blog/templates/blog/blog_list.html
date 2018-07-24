@@ -11,7 +11,9 @@
         <div class="row">
             <div class="col-md-10">
                 <div class="panel panel panel-primary">
-                    <div class="panel-heading">博客列表</div>
+                    <div class="panel-heading">{% block blogs_title %}
+                    博客列表
+                    {% endblock %}</div>
                     <div class="panel-body">
                         {% for blog in page_of_blogs %}
                             <div class="blog">
@@ -38,8 +40,8 @@
                         <ul class="blog-type">
                             {% for blog_type in blog_types %}
                                <li>
-                                   <a href="">
-                                       {{ blog_type.type_name }}
+                                   <a href="{% url 'blogs_with_type' blog_type.pk %}">
+                                       {{ blog_type.type_name }}({{ blog_type.blog_count }})
                                    </a>
                                </li>
                             {% empty %}
@@ -51,7 +53,17 @@
                 <div class="panel panel panel-warning">
                     <div class="panel-heading">日期归档</div>
                     <div class="panel-body">
-                    Panel content
+                        <ul class="blog-type">
+                            {% for blog_date,blog_count in blog_dates.items %}
+                               <li>
+                                   <a href="{% url 'blogs_with_date' blog_date.year blog_date.month %}">
+                                       {{ blog_date|date:'Y年m月' }}({{ blog_count }})
+                                   </a>
+                               </li>
+                            {% empty %}
+                                <li>暂无归档</li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>
