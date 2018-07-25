@@ -6,10 +6,47 @@
 {% block content %}
     <div class="container" style="margin-top: 10px">
         <div class="row">
-            <div class="jumbotron">
-              <h1>Hello, world!</h1>
-              <p>...</p>
-              <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a></p>
+            <div class="col-md-4">
+                <div class="list-group">
+                  <li class="list-group-item active">
+                    今日热门博客
+                  </li>
+                  {% for blog in today_hot_blogs %}
+                      <a href="{% url 'blog_detail' blog.pk %}" class="list-group-item">{{ blog.title }}
+                          <span class="badge">阅读{{ blog.get_one_day_read_count }}</span>
+                      </a>
+                  {% empty %}
+                      <li class="list-group-item">暂无热门博客</li>
+                  {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="list-group">
+                  <li class="list-group-item active">
+                    本周热门博客
+                  </li>
+                  {% for blog in week_hot_blogs %}
+                      <a href="{% url 'blog_detail' blog.pk %}" class="list-group-item">{{ blog.title }}
+                          <span class="badge">阅读{{ blog.week_hot_sum }}</span>
+                      </a>
+                  {% empty %}
+                      <li class="list-group-item">暂无热门博客</li>
+                  {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="list-group">
+                  <li class="list-group-item active">
+                      本月热门博客
+                  </li>
+                  {% for blog in month_hot_blogs %}
+                      <a href="{% url 'blog_detail' blog.pk %}" class="list-group-item">{{ blog.title }}
+                          <span class="badge">阅读{{ blog.month_hot_sum }}</span>
+                      </a>
+                  {% empty %}
+                      <li class="list-group-item">暂无热门博客</li>
+                  {% endfor %}
+                </div>
             </div>
         </div>
     </div>

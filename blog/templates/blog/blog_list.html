@@ -23,7 +23,7 @@
                                     {{ blog.blog_type.type_name }}
                                 </p>
                                 <p>{{ blog.content|truncatechars:50 }}</p>
-                                <p>{{ blog.author }} 发布于 {{ blog.created_time }} 评论（） 阅读（）</p>
+                                <p>{{ blog.author }} 发布于 {{ blog.created_time }} 评论() 阅读({{ blog.get_read_count }})</p>
                             </div>
                         {% empty %}
                             <div class="blog">
