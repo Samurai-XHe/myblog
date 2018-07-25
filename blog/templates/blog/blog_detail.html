@@ -16,7 +16,7 @@
                         <h3>{{ blog.title }}</h3>
                         <p class="blog_title_bottom">
                             <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
-                            {{ blog.blog_type.type_name }}&nbsp;&nbsp;&nbsp;作者：{{ blog.author }}
+                            <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">{{ blog.blog_type.type_name }}</a>&nbsp;&nbsp;&nbsp;作者：{{ blog.author }}
                         </p>
                     </div>
                 <div class="row">

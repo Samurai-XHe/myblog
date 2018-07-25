@@ -12,7 +12,7 @@
             <div class="col-md-10">
                 <div class="panel panel panel-primary">
                     <div class="panel-heading">{% block blogs_title %}
-                    博客列表
+                    博客列表 共{{ all_blogs_count }}篇博客
                     {% endblock %}</div>
                     <div class="panel-body">
                         {% for blog in page_of_blogs %}

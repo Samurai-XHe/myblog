@@ -36,7 +36,10 @@ def base_data(request,blogs):
         blog_count = Blog.objects.filter(created_time__year=blog_date.year,
                                          created_time__month=blog_date.month).count()
         blog_dates_dict[blog_date] = blog_count
+
+    all_blogs = Blog.objects.all().count()
     context = {}
+    context['all_blogs_count'] = all_blogs
     context['blog_dates'] = blog_dates_dict
     context['blog_types'] = blog_types
     context['page_range'] = page_range
@@ -58,6 +61,8 @@ def blogs_with_type(request,blog_type_pk):
 def blogs_with_date(request,year,month):
     blogs = Blog.objects.filter(created_time__year=year,created_time__month=month)
     context = base_data(request,blogs)
+    all_blogs = Blog.objects.filter(created_time__year=year,created_time__month=month).count()
+    context['date_blog_count'] = all_blogs
     context['blogs_date'] = "%s年%s月" %(year,month)
     return render(request,'blog/blogs_with_date.html',context)
 
