@@ -74,17 +74,22 @@ def blogs_with_date(request,year,month):
 def blog_detail(request,blog_pk):
     blog = get_object_or_404(Blog,pk=blog_pk)
     read_cookie_key = add_once_read(request,blog)
+    referer = request.META.get('HTTP_REFERER',reverse('index'))
+    content_type = ContentType.objects.get_for_model(blog)
     if request.method == 'POST':
         comment_form = CommentForm(request.POST,user=request.user)
         if comment_form.is_valid():
-            comment = comment_form
+            comment = Comment()
             comment.content_object = comment_form.cleaned_data['content_object']
             comment.user = comment_form.cleaned_data['user']
             comment.text = comment_form.cleaned_data['text']
             comment.save()
-            return redirect(reverse('blog_detail'))
+            return redirect(referer)
     else:
-        comment_form = CommentForm()
+        comment_form = CommentForm(initial={
+            'content_type':content_type,
+            'object_id':blog.pk,
+        })
     content_type = ContentType.objects.get_for_model(blog)
     comment_list = Comment.objects.filter(content_type=content_type,object_id=blog.pk)
 

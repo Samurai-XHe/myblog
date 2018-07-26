@@ -68,19 +68,25 @@
               <div class="panel-body">
                 <div class="panel panel-default">
                   <div class="panel-body">
-                      <form action="/" method="POST">
+                    {% if user.is_authenticated %}
+                        <form action="#" method="POST">
                           {% csrf_token %}
                                 {% for foo in comment_form %}
                                     {{ foo }}
                                 {% endfor %}
                           <input class="btn btn-primary" type="submit" value="提交评论">
                       </form>
+                    {% else %}
+                        <div class="alert alert-warning" role="alert">
+                            <a href="{% url 'login' %}?from={{ request.get_full_path }}" class="alert-link" style="color:blue;">登录 </a>后才能评论哦！
+                        </div>
+                    {% endif %}
                   </div>
                 </div>
                 <ul class="list-group">
                     {% for comment in comment_list %}
                         <li class="list-group-item">
-                            {{ comment.user }}评论于{{ comment.comment_time }}<br/>
+                            {{ comment.user }} 评论于 {{ comment.comment_time }}<br/>
                             {{ comment.text }}
                         </li>
                     {% empty %}
