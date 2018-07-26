@@ -25,15 +25,15 @@ def add_once_read(request,obj):
 
 def get_today_hot_blog():
     today = timezone.now().date()
-    blogs = Blog.objects.filter(read_count__date=today)
+    blogs = Blog.objects.filter(read_detail__date=today)
     return blogs[:7]
 
 def get_week_hot_blog():
     today = timezone.now().date()
     date = today - datetime.timedelta(days=7)
     blogs = Blog.objects\
-        .filter(read_count__date__lte=today,read_count__date__gt=date)\
-        .annotate(week_hot_sum=Sum('read_count__one_day_read_count'))\
+        .filter(read_detail__date__lte=today,read_detail__date__gt=date)\
+        .annotate(week_hot_sum=Sum('read_detail__one_day_read_count'))\
         .order_by('-week_hot_sum')
     return blogs[:7]
 
@@ -41,7 +41,7 @@ def get_month_hot_blog():
     today = timezone.now().date()
     date = today - datetime.timedelta(days=30)
     blogs = Blog.objects\
-        .filter(read_count__date__lte=today,read_count__date__gt=date)\
-        .annotate(month_hot_sum=Sum('read_count__one_day_read_count'))\
+        .filter(read_detail__date__lte=today,read_detail__date__gt=date)\
+        .annotate(month_hot_sum=Sum('read_detail__one_day_read_count'))\
         .order_by('-month_hot_sum')
     return blogs[:7]

@@ -9,7 +9,7 @@
 {% block content %}
     <div class="container" style="margin-top: 10px">
         <div class="row">
-            <div class="col-md-10">
+            <div class="col-md-10 blog-list">
                 <div class="panel panel panel-primary">
                     <div class="panel-heading">{% block blogs_title %}
                     博客列表 共{{ all_blogs_count }}篇博客
@@ -22,7 +22,7 @@
                                     <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
                                     {{ blog.blog_type.type_name }}
                                 </p>
-                                <p>{{ blog.content|truncatechars:50 }}</p>
+                                <p>{{ blog.content|striptags|truncatechars:70 }}</p>
                                 <p>{{ blog.author }} 发布于 {{ blog.created_time }} 评论() 阅读({{ blog.get_read_count }})</p>
                             </div>
                         {% empty %}
@@ -33,7 +33,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-2">
+            <div class="col-md-2 type-and-date-list">
                 <div class="panel panel-info">
                     <div class="panel-heading">博客分类</div>
                     <div class="panel-body">

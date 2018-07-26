@@ -22,10 +22,9 @@
                 <div class="row">
                     <div class="col-md-10 col-md-offset-1">
                         <p class="blog_content">
-                            {{ blog.content }}
+                            {{ blog.content|safe }}
                         </p>
                     </div>
-
                 </div>
                 <div class="blog_bottom">
                     <p class="pull-right">
@@ -40,26 +39,56 @@
         <div class="blog_more">
             <nav aria-label="...">
                 <ul class="pager">
-                    {% if previous_page %}
-                      <li class="previous">
-                          <a href="{% url 'blog_detail' previous_page.pk %}">
-                              <span aria-hidden="true">&larr;</span> {{ previous_page.title }}
-                          </a>
-                      </li>
-                    {% else %}
-                      <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> 没有了</a></li>
-                    {% endif %}
                     {% if next_page %}
-                        <li class="next">
-                            <a href="{% url 'blog_detail' next_page.pk %}"> {{ next_page.title }}
-                                <span aria-hidden="true">&rarr;</span>
+                        <li class="pull-right" style="margin-left: 20px;">
+                            <a href="{% url 'blog_detail' next_page.pk %}">下一篇： {{ next_page.title }}
+                                <span aria-hidden="true"></span>
                             </a>
                         </li>
                     {% else %}
-                        <li class="next"><a href="#">没有了 <span aria-hidden="true">&rarr;</span></a></li>
+                        <li class="pull-right"><a href="#">没有了 <span aria-hidden="true"></span></a></li>
+                    {% endif %}
+                    {% if previous_page %}
+                      <li class="pull-right">
+                          <a href="{% url 'blog_detail' previous_page.pk %}">
+                              <span aria-hidden="true">上一篇：</span> {{ previous_page.title }}
+                          </a>
+                      </li>
+                    {% else %}
+                      <li class="pull-right"><a href="#"><span aria-hidden="true"></span> 没有了</a></li>
                     {% endif %}
               </ul>
             </nav>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+              <div class="panel-heading">评论区</div>
+              <div class="panel-body">
+                <div class="panel panel-default">
+                  <div class="panel-body">
+                      <form action="/" method="POST">
+                          {% csrf_token %}
+                                {% for foo in comment_form %}
+                                    {{ foo }}
+                                {% endfor %}
+                          <input class="btn btn-primary" type="submit" value="提交评论">
+                      </form>
+                  </div>
+                </div>
+                <ul class="list-group">
+                    {% for comment in comment_list %}
+                        <li class="list-group-item">
+                            {{ comment.user }}评论于{{ comment.comment_time }}<br/>
+                            {{ comment.text }}
+                        </li>
+                    {% empty %}
+                        <li class="list-group-item">暂无评论</li>
+                    {% endfor %}
+                </ul>
+              </div>
+            </div>
         </div>
     </div>
 {% endblock %}

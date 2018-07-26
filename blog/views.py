@@ -1,9 +1,13 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
+from django.urls import reverse
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.db.models import Count
+from django.contrib.contenttypes.models import ContentType
 from .models import Blog,BlogType
 from read_statistics.utils import add_once_read
+from comment.forms import CommentForm
+from comment.models import Comment
 
 def base_data(request,blogs):
     try:
@@ -70,9 +74,23 @@ def blogs_with_date(request,year,month):
 def blog_detail(request,blog_pk):
     blog = get_object_or_404(Blog,pk=blog_pk)
     read_cookie_key = add_once_read(request,blog)
-
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST,user=request.user)
+        if comment_form.is_valid():
+            comment = comment_form
+            comment.content_object = comment_form.cleaned_data['content_object']
+            comment.user = comment_form.cleaned_data['user']
+            comment.text = comment_form.cleaned_data['text']
+            comment.save()
+            return redirect(reverse('blog_detail'))
+    else:
+        comment_form = CommentForm()
+    content_type = ContentType.objects.get_for_model(blog)
+    comment_list = Comment.objects.filter(content_type=content_type,object_id=blog.pk)
 
     context = {}
+    context['comment_list'] = comment_list
+    context['comment_form'] = comment_form
     context['previous_page'] = Blog.objects.filter(created_time__lt=blog.created_time).first()
     context['next_page'] = Blog.objects.filter(created_time__gt=blog.created_time).last()
     context['blog'] = blog

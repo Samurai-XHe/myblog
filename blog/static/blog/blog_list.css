@@ -13,7 +13,11 @@ div.paginator {
 ul.blog-type {
     list-style-type: none;
 }
-
-
+div.blog-list {
+    padding-left: 0px;
+}
+div.type-and-date-list {
+    padding-right: 0px;
+}
 
 

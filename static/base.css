@@ -11,3 +11,9 @@ ul {
 ul.navbar-right {
     margin-right: 0;
 }
+div.day-hot {
+    padding-left: 0px;
+}
+div.month-hot {
+    padding-right: 0px;
+}

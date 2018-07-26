@@ -21,9 +21,38 @@
         </div>
         <div class="row">
             <ul class="nav nav-tabs">
-              <li role="presentation" class="{% block home_active %}{% endblock %}"><a href="{% url 'index' %}">首页</a></li>
-              <li role="presentation" class="{% block blog_active %}{% endblock %}"><a href="{% url 'blog_list' %}">博客</a></li>
-              <li role="presentation" class="{% block beautiful_picture_active %}{% endblock %}"><a href="#">美图</a></li>
+                <li role="presentation" class="{% block home_active %}{% endblock %}">
+                    <a href="{% url 'index' %}">首页</a>
+                </li>
+                <li role="presentation" class="{% block blog_active %}{% endblock %}">
+                    <a href="{% url 'blog_list' %}">博客</a>
+                </li>
+                <li role="presentation" class="{% block beautiful_picture_active %}{% endblock %}">
+                    <a href="#">美图</a>
+                </li>
+                {% if user.is_authenticated %}
+                    <li role="presentation" class="dropdown pull-right">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
+                          欢迎您 {{ user.username }}<span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li role="presentation" class="">
+                                <a href="{% url 'logout' %}?from={{ request.get_full_path }}">退出</a>
+                            </li>
+                            <li role="presentation" class="">
+                                <a href="{% url 'admin:index' %}">后台管理</a>
+                            </li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li role="presentation" class="{% block login_active %}{% endblock %} pull-right">
+                    <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a>
+                </li>
+                <li role="presentation" class="{% block register_active %}{% endblock %} pull-right">
+                    <a href="#">注册</a>
+                </li>
+                {% endif %}
+
             </ul>
         </div>
 
