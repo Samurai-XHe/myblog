@@ -7,7 +7,7 @@ def login(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
-            user = login_form.cleaned_data['user']
+            user = login_form.cleaned_data.get['user']
             auth.login(request,user)
             return redirect(request.GET.get('from',reverse('index')))
     else:

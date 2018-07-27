@@ -19,3 +19,6 @@ p.blog_content {
     color: #000;
     font-size: 1.3em;
 }
+div.django-ckeditor-widget {
+    width: 100%;
+}

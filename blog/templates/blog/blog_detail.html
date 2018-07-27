@@ -4,6 +4,8 @@
 {% block blog_active %}active{% endblock %}
 {% block head_extends %}
     <link rel="stylesheet" href="{% static 'blog/blog.css' %}">
+    <script src="{% static 'ckeditor/ckeditor/ckeditor.js' %}"></script>
+    <script src="{% static 'ckeditor/ckeditor-init.js' %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -66,28 +68,26 @@
             <div class="panel panel-default">
               <div class="panel-heading">评论区</div>
               <div class="panel-body">
-                <div class="panel panel-default">
-                  <div class="panel-body">
                     {% if user.is_authenticated %}
-                        <form action="#" method="POST">
-                          {% csrf_token %}
+                        <label>{{ user.username }}欢迎评论!</label>
+                        <form action="{% url 'update_comment' %}" method="POST">
+                            {% csrf_token %}
                                 {% for foo in comment_form %}
                                     {{ foo }}
                                 {% endfor %}
-                          <input class="btn btn-primary" type="submit" value="提交评论">
-                      </form>
+                            <span id="comment_error" class="text-danger pull-left"></span>
+                            <input class="btn btn-primary pull-right" type="submit" value="提交评论">
+                        </form>
                     {% else %}
                         <div class="alert alert-warning" role="alert">
                             <a href="{% url 'login' %}?from={{ request.get_full_path }}" class="alert-link" style="color:blue;">登录 </a>后才能评论哦！
                         </div>
                     {% endif %}
-                  </div>
-                </div>
-                <ul class="list-group">
+                <ul class="list-group" style="margin-top: 50px;">
                     {% for comment in comment_list %}
                         <li class="list-group-item">
-                            {{ comment.user }} 评论于 {{ comment.comment_time }}<br/>
-                            {{ comment.text }}
+                            {{ comment.user }} 评论于 {{ comment.comment_time|date:'Y-m-d H:i:s' }}<br/>
+                            {{ comment.text|safe }}
                         </li>
                     {% empty %}
                         <li class="list-group-item">暂无评论</li>
@@ -97,4 +97,48 @@
             </div>
         </div>
     </div>
+{% endblock %}
+{% block script_extends %}
+    <script>
+        $(function () {
+            $('form').submit(function () {
+                // 清空提示信息
+                $('#comment_error').text('');
+                if (CKEDITOR.instances['id_text'].document.getBody().getText().trim() == ''){
+                    $('#comment_error').text('评论内容不能为空。(这是JS判断)');
+                    return false;
+                }
+                // 更新数据到textarea
+                CKEDITOR.instances['id_text'].updateElement();
+
+                //使用AJAX提交
+                $.ajax({
+                    url:'{% url 'update_comment' %}',
+                    type:'POST',
+                    data:$(this).serialize(),
+                    cache:false,
+                    success:function (data) {
+                        console.log(data);
+                        if (data['status'] == 'SUCCESS') {
+                            var comment_html = '<li class="list-group-item">' + data['username'] + ' 评论于 ' +
+                                    data['comment_time'] + '<br> ' + data['text'] + '<div></div></li>';
+                            $('ul.list-group').prepend(comment_html);
+                            // 评论成功后清空编辑框的内容
+                            CKEDITOR.instances['id_text'].setData('');
+                            // 提示评论成功
+                            $('#comment_error').text(data['message'])
+                        }
+                        else{
+                            //显示错误信息
+                            $('#comment_error').text(data['message'])
+                        }
+                    },
+                    error:function (xhr) {
+                        console.log(xhr)
+                    }
+                });
+                return false;
+            })
+        })
+    </script>
 {% endblock %}
