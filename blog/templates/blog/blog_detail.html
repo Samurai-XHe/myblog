@@ -79,14 +79,14 @@
                             <input class="btn btn-primary pull-right" type="submit" value="提交评论">
                         </form>
                     {% else %}
-                        <div class="alert alert-warning" role="alert">
+                        <div class="alert alert-danger" role="alert">
                             <a href="{% url 'login' %}?from={{ request.get_full_path }}" class="alert-link" style="color:blue;">登录 </a>后才能评论哦！
                         </div>
                     {% endif %}
                 <ul class="list-group" style="margin-top: 50px;">
                     {% for comment in comment_list %}
                         <li class="list-group-item">
-                            {{ comment.user }} 评论于 {{ comment.comment_time|date:'Y-m-d H:i:s' }}<br/>
+                            {{ comment.user }} 评论于 {{ comment.comment_time|date:'Y-m-d H:i' }}<br/>
                             {{ comment.text|safe }}
                         </li>
                     {% empty %}

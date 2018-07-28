@@ -1,13 +1,14 @@
 from django.shortcuts import render,redirect
 from django.contrib import auth
+from django.contrib.auth.models import User
 from django.urls import reverse
-from .forms import LoginForm
+from .forms import LoginForm,RegisterForm
 
 def login(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
         if login_form.is_valid():
-            user = login_form.cleaned_data.get['user']
+            user = login_form.cleaned_data['user']
             auth.login(request,user)
             return redirect(request.GET.get('from',reverse('index')))
     else:
@@ -20,3 +21,24 @@ def login(request):
 def logout(request):
     auth.logout(request)
     return redirect(request.GET.get('from',reverse('index')))
+
+def register(request):
+    referer = request.GET.get('from')
+    if request.method == 'POST':
+        register_form = RegisterForm(request.POST)
+        if register_form.is_valid():
+            username = register_form.cleaned_data['username']
+            password = register_form.cleaned_data['password']
+            email = register_form.cleaned_data['email']
+
+            # 写入数据库
+            new_user = User.objects.create_user(username=username,password=password,email=email)
+            # 顺便登录
+            user = auth.authenticate(username=username,password=password)
+            auth.login(request,user)
+            return redirect(referer,'/')
+    else:
+        register_form = RegisterForm()
+    context = {}
+    context['register_form'] = register_form
+    return render(request,'user/register.html',context)

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}{% endblock %}</title>
+    <title>{% block title %}人间五十年,如梦亦如幻{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'base.css' %}">
     <link href="{% static 'bootstrap-3.3.7/css/bootstrap.min.css' %}" rel="stylesheet">
     <script src="{% static 'jQuery v1.12.4.min.js' %}"></script>
@@ -45,12 +45,12 @@
                         </ul>
                     </li>
                 {% else %}
+                    <li role="presentation" class="{% block register_active %}{% endblock %} pull-right">
+                        <a href="{% url 'register' %}?from={{ request.get_full_path }}">注册</a>
+                    </li>
                     <li role="presentation" class="{% block login_active %}{% endblock %} pull-right">
-                    <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a>
-                </li>
-                <li role="presentation" class="{% block register_active %}{% endblock %} pull-right">
-                    <a href="#">注册</a>
-                </li>
+                        <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a>
+                    </li>
                 {% endif %}
 
             </ul>

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% block title %}欢迎登录！{% endblock %}
-{% block login_active %}active{% endblock %}
+{% block title %}欢迎注册！{% endblock %}
+{% block register_active %}active{% endblock %}
 
 {% block content %}
     <div class="container" style="margin-top: 10px;">
@@ -10,20 +10,19 @@
                 {% if not user.is_authenticated %}
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <h3 class="panel-title">欢迎登录！</h3>
+                            <h3 class="panel-title">欢迎注册！</h3>
                         </div>
                         <div class="panel-body">
                             <form action="" method="POST">
                                 {% csrf_token %}
-                                {% for field in login_form %}
+                                {% for field in register_form %}
                                     <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                     {{ field }}
                                     <p class="text-danger">{{ field.errors.as_text }}</p>
                                 {% endfor %}
-                                <span class="text-danger">{{ login_form.non_field_errors }}</span>
+                                <span class="text-danger">{{ register_form.non_field_errors }}</span>
                                 <div class="clearfix"></div>
-                                <a href="#" class="pull-left">忘记密码？</a>
-                                <input type="submit" value="登录" class="btn btn-primary pull-right">
+                                <input type="submit" value="注册" class="btn btn-primary pull-right">
                             </form>
                         </div>
                     </div>
@@ -39,7 +38,7 @@
 {% endblock %}
 {% block script_extends %}
     <script>
-        $(function (){
+        $(function () {
             $('#id_username').focus();
             /*
             //表单验证
@@ -58,9 +57,6 @@
                     return false;
                 }
             })*/
-        });
+        })
     </script>
 {% endblock %}
-
-
-
