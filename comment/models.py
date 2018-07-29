@@ -13,8 +13,12 @@ class Comment(models.Model):
     comment_time = models.DateTimeField(auto_now_add=True) # 评论时间
     text = models.TextField() # 评论内容
 
+    root = models.ForeignKey('self',related_name='root_comment',on_delete=models.CASCADE,null=True)
+    parent = models.ForeignKey('self',related_name='parent_comment',on_delete=models.CASCADE,null=True)
+    reply_to = models.ForeignKey(User,related_name='replies',on_delete=models.CASCADE,null=True)
+
     def __str__(self):
         return self.text
 
     class Meta:
-        ordering = ['-comment_time']
+        ordering = ['comment_time']

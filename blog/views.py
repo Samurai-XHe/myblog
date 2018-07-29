@@ -64,7 +64,6 @@ def blogs_with_type(request,blog_type_pk):
 
 def blogs_with_date(request,year,month):
     blogs_list = Blog.objects.filter(created_time__year=year,created_time__month=month)
-    print(blogs_list,'+++++++++++++++++++++++++++++++++++++++++++++++++++')
     context = base_data(request,blogs_list)
     all_blogs = Blog.objects.filter(created_time__year=year,created_time__month=month).count()
     context['date_blog_count'] = all_blogs
@@ -76,15 +75,15 @@ def blog_detail(request,blog_pk):
     blog = get_object_or_404(Blog,pk=blog_pk)
     read_cookie_key = add_once_read(request,blog)
     blog_content_type = ContentType.objects.get_for_model(blog)
-    comments = Comment.objects.filter(content_type=blog_content_type, object_id=blog.pk)
-
+    comments = Comment.objects.filter(content_type=blog_content_type, object_id=blog.pk,parent=None).order_by('-comment_time')
 
     context = {}
     context['previous_page'] = Blog.objects.filter(created_time__lt=blog.created_time).first()
     context['next_page'] = Blog.objects.filter(created_time__gt=blog.created_time).last()
     context['blog'] = blog
     context['comment_list'] = comments
-    context['comment_form'] = CommentForm(initial={'content_type': blog_content_type.model, 'object_id': blog_pk})
+    context['comment_form'] = CommentForm(
+        initial={'content_type': blog_content_type.model, 'object_id': blog.pk,'reply_comment_id':0})
     response = render(request,'blog/blog_detail.html',context) # 响应
     response.set_cookie(read_cookie_key,'true') # 添加阅读cookie
     return response

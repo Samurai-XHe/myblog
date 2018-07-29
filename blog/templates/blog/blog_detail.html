@@ -70,7 +70,14 @@
               <div class="panel-body">
                     {% if user.is_authenticated %}
                         <label>{{ user.username }}欢迎评论!</label>
-                        <form action="{% url 'update_comment' %}" method="POST">
+                        <form id="comment_form" action="{% url 'update_comment' %}" method="POST">
+                            <div id="reply_comment_container" style="display: none;">
+                                <p>回复：</p>
+                                <div id="reply_comment">
+
+                                </div>
+
+                            </div>
                             {% csrf_token %}
                                 {% for foo in comment_form %}
                                     {{ foo }}
@@ -83,14 +90,36 @@
                             <a href="{% url 'login' %}?from={{ request.get_full_path }}" class="alert-link" style="color:blue;">登录 </a>后才能评论哦！
                         </div>
                     {% endif %}
-                <ul class="list-group" style="margin-top: 50px;">
+                <ul id="comment_list" class="list-group" style="margin-top: 50px;">
                     {% for comment in comment_list %}
                         <li class="list-group-item">
-                            {{ comment.user }} 评论于 {{ comment.comment_time|date:'Y-m-d H:i' }}<br/>
-                            {{ comment.text|safe }}
+                            <div class="comment">
+                                <span>{{ comment.user }} 评论于 {{ comment.comment_time|date:'Y-m-d H:i' }}</span>
+                                <span><a href="javascript:reply({{ comment.pk }});">回复</a></span>
+                                <div id="comment_{{ comment.pk }}">
+                                    {{ comment.text|safe }}
+                                </div>
+                                {% if comment.root_comment.all %}
+                                    <ul id="root_{{ comment.pk }}" class="list-group">
+                                        {% for reply in comment.root_comment.all %}
+                                            <li class="list-group-item">
+                                                <span>{{ reply.user.username }} 于 {{ reply.comment_time|date:'Y-m-d H:i' }}</span>
+                                                <span>回复：</span>
+                                                <span>{{ reply.reply_to.username }}</span>
+                                                <span class="pull-right">
+                                                    <a href="javascript:reply({{ reply.pk }});">回复</a>
+                                                </span>
+                                                <div id="comment_{{ reply.pk }}">
+                                                    {{ reply.text|safe }}
+                                                </div>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
                         </li>
                     {% empty %}
-                        <li class="list-group-item">暂无评论</li>
+                        <li id="no_comment" class="list-group-item">暂无评论</li>
                     {% endfor %}
                 </ul>
               </div>
@@ -120,11 +149,36 @@
                     success:function (data) {
                         console.log(data);
                         if (data['status'] == 'SUCCESS') {
-                            var comment_html = '<li class="list-group-item">' + data['username'] + ' 评论于 ' +
-                                    data['comment_time'] + '<br> ' + data['text'] + '<div></div></li>';
-                            $('ul.list-group').prepend(comment_html);
-                            // 评论成功后清空编辑框的内容
-                            CKEDITOR.instances['id_text'].setData('');
+                            if($('#reply_comment_id').val()=='0'){
+                                //插入评论
+                                var comment_html = '<li class="list-group-item">\n' +
+                        '                            <div id="root_'+ data['pk'] +'" class="comment">\n' +
+                        '                                <span>'+ data['username'] +' 评论于 '+ data['comment_time'] +'</span>\n' +
+                        '                                <span><a href="javascript:reply('+ data['pk'] +');">回复</a></span>\n' +
+                        '                                <div id="comment_'+ data['pk'] +'">\n' +
+                        '                                    '+ data['text'] +'\n' +
+                        '                                </div>' +
+                                    '                </div>';
+                                $('#comment_list').prepend(comment_html);
+                            } else{
+                                //插入回复
+                                var reply_html = '<li class="list-group-item">\n' +
+    '                                                <span>'+ data['username'] +' 于 '+ data['comment_time'] +'</span>\n' +
+    '                                                <span>回复：</span>\n' +
+    '                                                <span>'+ data['reply_to'] +'</span>\n' +
+    '                                                <span class="pull-right">\n' +
+    '                                                    <a href="javascript:reply('+ data['pk'] +');">回复</a>\n' +
+    '                                                </span>\n' +
+    '                                                <div id="comment_'+ data['pk'] +'">\n' +
+    '                                                    '+ data['text'] +'\n' +
+    '                                                </div>\n' +
+    '                                            </li>'
+                                $('#root_'+data['root_pk']).append(reply_html)
+                            }
+                            CKEDITOR.instances['id_text'].setData('');  // 评论成功后清空编辑框的内容
+                            $('#reply_comment_container').hide();  // 隐藏回复提示
+                            $('#reply_comment_id').val('0');  // 初始化评论id
+                            $('#no_comment').remove();  // 因为是ajax提交，所以“暂无评论”不会消失，要用js手动移除
                             // 提示评论成功
                             $('#comment_error').text(data['message'])
                         }
@@ -138,7 +192,19 @@
                     }
                 });
                 return false;
-            })
+            });
+
         })
+        function reply(reply_comment_id){
+                $('#reply_comment_id').val(reply_comment_id);
+                var html = $('#comment_'+reply_comment_id).html();
+                $('#reply_comment').html(html);
+                $('#reply_comment_container').show();
+
+                $('html').animate({scrollTop:$('#comment_form').offset().top - 60},300,function () {
+                    CKEDITOR.instances['id_text'].focus();
+                })
+
+            }
     </script>
 {% endblock %}

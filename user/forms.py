@@ -14,7 +14,7 @@ class LoginForm(forms.Form):
             'max_length': '用户名超过10位',
             'required': '用户名不能为空!(这是forms字段验证)',
         },
-        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$','必须是数字和英文组合(这是validators)')]
+        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$','必须是字母开头的字母数字组合(这是validators)')]
     )
     password = forms.CharField(
         label='密码',
@@ -26,7 +26,7 @@ class LoginForm(forms.Form):
             'max_length': '密码超过20位',
             'required': '密码不能为空!(这是forms字段验证)',
         },
-        validators=[RegexValidator('^[a-zA-Z]\w{5,17}$', '必须是数字和英文组合(这是validators)')]
+        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合(这是validators)')]
     )
 
     def clean(self):
@@ -55,7 +55,7 @@ class RegisterForm(forms.Form):
             'max_length':'不能超过10位',
             'min_length':'不能少于3位',
         },
-        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$', '必须是数字和英文组合(这是validators)')]
+        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$', '必须是字母开头的字母数字组合(这是validators)')]
     )
     email = forms.EmailField(
         label='邮箱',
@@ -84,7 +84,7 @@ class RegisterForm(forms.Form):
             'max_length': '不能超过23位',
             'min_length': '不能少于8位',
         },
-        validators=[RegexValidator('^[a-zA-Z]\w{5,17}$', '必须是数字和英文组合(这是validators)')]
+        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合(这是validators)')]
     )
     password_again = forms.CharField(
         label='密码',
@@ -116,7 +116,7 @@ class RegisterForm(forms.Form):
         return email
 
     def clean_password_again(self):
-        password = self.cleaned_data['password']
+        password = self.cleaned_data.get('password','')
         password_again = self.cleaned_data['password_again']
         if password != password_again:
             raise forms.ValidationError('两次输入的密码不一致(这是clean_password_again验证)')
