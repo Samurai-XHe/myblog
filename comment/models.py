@@ -13,9 +13,9 @@ class Comment(models.Model):
     comment_time = models.DateTimeField(auto_now_add=True) # 评论时间
     text = models.TextField() # 评论内容
 
-    root = models.ForeignKey('self',related_name='root_comment',on_delete=models.CASCADE,null=True)
-    parent = models.ForeignKey('self',related_name='parent_comment',on_delete=models.CASCADE,null=True)
-    reply_to = models.ForeignKey(User,related_name='replies',on_delete=models.CASCADE,null=True)
+    root = models.ForeignKey('self',related_name='root_comment',on_delete=models.CASCADE,null=True)     # 顶级评论
+    parent = models.ForeignKey('self',related_name='parent_comment',on_delete=models.CASCADE,null=True) # 上级评论
+    reply_to = models.ForeignKey(User,related_name='replies',on_delete=models.CASCADE,null=True)        # 上级评论的作者
 
     def __str__(self):
         return self.text

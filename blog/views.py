@@ -42,6 +42,10 @@ def base_data(request,blogs):
         blog_dates_dict[blog_date] = blog_count
 
     all_blogs = Blog.objects.all().count()
+
+    # 获取每篇博客的评论数
+
+
     context = {}
     context['all_blogs_count'] = all_blogs
     context['blog_dates'] = blog_dates_dict

@@ -43,7 +43,7 @@ class CommentForm(forms.Form):
 
     def clean_text(self):
         text = self.cleaned_data['text']
-        if len(text) <= 9:   #  因为text带有<p>标签，所以要比限制的字数多7个，这里是想限制不能少于6个字，所以是5+7=12
+        if len(text) <= 9:   #  因为text带有<p>标签，所以要比限制的字数多7个，这里是想限制不能少于3个字，所以是2+7=9
             raise forms.ValidationError('字数不能少于3个(clean_text验证)')
         elif len(text) > 107:    #  因为text带有<p>标签，所以要比限制的字数多7个，这里是想限制不能超过100个字，所以是100+7=107
             raise forms.ValidationError('字数不能超过100个(clean_text验证)')
