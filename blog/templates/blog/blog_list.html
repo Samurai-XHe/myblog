@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load comment_tags %}
+{% load likes_tags %}
 {% block title %}这里是博客列表{% endblock %}
 {% block blog_active %}active{% endblock %}
 {% block head_extends %}
@@ -24,7 +25,12 @@
                                     {{ blog.blog_type.type_name }}
                                 </p>
                                 <p>{{ blog.content|striptags|truncatechars:70 }}</p>
-                                <p>{{ blog.author }} 发布于 {{ blog.created_time }} 评论({% get_comment_count blog %}) 阅读({{ blog.get_read_count }})</p>
+                                <p>
+                                    {{ blog.author }} 发布于 {{ blog.created_time }}
+                                    评论({% get_comment_count blog %})
+                                    阅读({{ blog.get_read_count }})
+                                    点赞({% get_likes_count blog %})
+                                </p>
                             </div>
                         {% empty %}
                             <div class="blog">

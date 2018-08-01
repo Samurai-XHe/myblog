@@ -42,10 +42,10 @@ class CommentForm(forms.Form):
         return self.cleaned_data
 
     def clean_text(self):
-        text = self.cleaned_data['text']
+        text = self.cleaned_data['text']   # 注意！ 表情等会被转译成img标签，因此统计字符数是个问题
         if len(text) <= 9:   #  因为text带有<p>标签，所以要比限制的字数多7个，这里是想限制不能少于3个字，所以是2+7=9
             raise forms.ValidationError('字数不能少于3个(clean_text验证)')
-        elif len(text) > 107:    #  因为text带有<p>标签，所以要比限制的字数多7个，这里是想限制不能超过100个字，所以是100+7=107
+        elif len(text) > 5007:    #  因为text带有<p>标签，所以要比限制的字数多7个，这里是想限制不能超过100个字，所以是5000+7=5007
             raise forms.ValidationError('字数不能超过100个(clean_text验证)')
         return text
 
