@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load comment_tags %}
 {% block title %}{{ blog.title }}{% endblock %}
 {% block blog_active %}active{% endblock %}
 {% block head_extends %}
@@ -31,7 +32,7 @@
                         <div class="blog_bottom">
                             <p class="pull-right">
                                 发布日期：{{ blog.created_time }}&nbsp;&nbsp;&nbsp;
-                                评论()&nbsp;&nbsp;阅读({{ blog.get_read_count }})
+                                评论(<span id="comment_count">{% get_comment_count blog %}</span>)&nbsp;&nbsp;阅读({{ blog.get_read_count }})
                             </p>
                         </div>
                     </div>
@@ -76,6 +77,7 @@
                                 <div id="reply_comment"></div>
                             </div>
                             {% csrf_token %}
+                            {% get_comment_form blog as comment_form %}
                             {% for foo in comment_form %}
                                 {{ foo }}
                             {% endfor %}
@@ -90,6 +92,7 @@
                         </div>
                     {% endif %}
                     <ul id="comment_list" class="list-group" style="margin-top: 50px;">
+                        {% get_comment_list blog as comment_list %}
                         {% for comment in comment_list %}
                             <li class="list-group-item">
                                 <div class="comment">
@@ -145,6 +148,8 @@
                     cache:false,
                     success:function (data) {
                         console.log(data);
+                        var comment_count = Number($('#comment_count').text())+1
+                        $('#comment_count').text(comment_count)
                         if (data['status'] == 'SUCCESS') {
                             if($('#reply_comment_id').val()=='0'){
                                 //插入评论

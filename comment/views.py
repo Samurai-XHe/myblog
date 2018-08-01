@@ -1,6 +1,4 @@
-from django.shortcuts import render,redirect
 from django.urls import reverse
-from django.contrib.contenttypes.models import ContentType
 from django.http import JsonResponse
 from .models import Comment
 from .forms import CommentForm

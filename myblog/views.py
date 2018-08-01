@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from read_statistics.utils import get_today_hot_blog,get_week_hot_blog,get_month_hot_blog
+from blog.utils import get_today_hot_blog,get_week_hot_blog,get_month_hot_blog
 
 
 def index(request):

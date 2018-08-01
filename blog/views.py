@@ -5,10 +5,6 @@ from django.db.models import Count
 from .models import Blog,BlogType
 from read_statistics.utils import add_once_read
 
-from django.contrib.contenttypes.models import ContentType
-from comment.models import Comment
-from comment.forms import CommentForm
-
 def base_data(request,blogs):
     try:
         page = int(request.GET.get('page',1))
@@ -74,20 +70,13 @@ def blogs_with_date(request,year,month):
     context['blogs_date'] = "%s年%s月" %(year,month)
     return render(request,'blog/blogs_with_date.html',context)
 
-
 def blog_detail(request,blog_pk):
     blog = get_object_or_404(Blog,pk=blog_pk)
     read_cookie_key = add_once_read(request,blog)
-    blog_content_type = ContentType.objects.get_for_model(blog)
-    comments = Comment.objects.filter(content_type=blog_content_type, object_id=blog.pk,parent=None).order_by('-comment_time')
-
     context = {}
     context['previous_page'] = Blog.objects.filter(created_time__lt=blog.created_time).first()
     context['next_page'] = Blog.objects.filter(created_time__gt=blog.created_time).last()
     context['blog'] = blog
-    context['comment_list'] = comments
-    context['comment_form'] = CommentForm(
-        initial={'content_type': blog_content_type.model, 'object_id': blog.pk,'reply_comment_id':0})
     response = render(request,'blog/blog_detail.html',context) # 响应
     response.set_cookie(read_cookie_key,'true') # 添加阅读cookie
     return response
