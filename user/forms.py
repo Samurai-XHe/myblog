@@ -10,8 +10,6 @@ class LoginForm(forms.Form):
         max_length=10,
         widget=forms.TextInput(attrs={'class':'form-control','placeholder':'请输入用户名'}),
         error_messages={
-            'min_length': '用户名少于3位',
-            'max_length': '用户名超过10位',
             'required': '用户名不能为空!(这是forms字段验证)',
         },
         validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$','必须是字母开头的字母数字组合(这是validators)')]
@@ -22,8 +20,6 @@ class LoginForm(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'请输入密码'}),
         error_messages = {
-            'min_length': '密码少于8位',
-            'max_length': '密码超过20位',
             'required': '密码不能为空!(这是forms字段验证)',
         },
         validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合(这是validators)')]
@@ -47,7 +43,7 @@ class RegisterForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'请输入3-10位的用户名',
+                'placeholder':'3-10位字母开头的字母数字组合',
             }
         ),
         error_messages={
@@ -62,7 +58,7 @@ class RegisterForm(forms.Form):
         widget=forms.EmailInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'请输入邮箱',
+                'placeholder':'请输入可用的邮箱地址',
             }
         ),
         error_messages={
@@ -76,7 +72,7 @@ class RegisterForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': '请输入8-23位的密码',
+                'placeholder': '8-23位字母开头的大小写字母和数字组合',
             }
         ),
         error_messages={
@@ -87,7 +83,7 @@ class RegisterForm(forms.Form):
         validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合(这是validators)')]
     )
     password_again = forms.CharField(
-        label='密码',
+        label='再输一遍密码',
         min_length=8,
         max_length=23,
         widget=forms.PasswordInput(

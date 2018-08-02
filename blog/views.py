@@ -4,6 +4,7 @@ from django.conf import settings
 from django.db.models import Count
 from .models import Blog,BlogType
 from read_statistics.utils import add_once_read
+from user.forms import LoginForm
 
 def base_data(request,blogs):
     try:
@@ -77,6 +78,7 @@ def blog_detail(request,blog_pk):
     context['previous_page'] = Blog.objects.filter(created_time__lt=blog.created_time).first()
     context['next_page'] = Blog.objects.filter(created_time__gt=blog.created_time).last()
     context['blog'] = blog
+    context['login_form'] = LoginForm()
     response = render(request,'blog/blog_detail.html',context) # 响应
     response.set_cookie(read_cookie_key,'true') # 添加阅读cookie
     return response
