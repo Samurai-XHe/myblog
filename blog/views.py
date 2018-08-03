@@ -2,9 +2,9 @@ from django.shortcuts import render,get_object_or_404
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.db.models import Count
+from django.views.generic import DetailView
 from .models import Blog,BlogType
 from read_statistics.utils import add_once_read
-from user.forms import LoginForm
 
 def base_data(request,blogs):
     try:
@@ -71,14 +71,29 @@ def blogs_with_date(request,year,month):
     context['blogs_date'] = "%s年%s月" %(year,month)
     return render(request,'blog/blogs_with_date.html',context)
 
-def blog_detail(request,blog_pk):
+def blog_detail_0(request,blog_pk):
     blog = get_object_or_404(Blog,pk=blog_pk)
     read_cookie_key = add_once_read(request,blog)
     context = {}
     context['previous_page'] = Blog.objects.filter(created_time__lt=blog.created_time).first()
     context['next_page'] = Blog.objects.filter(created_time__gt=blog.created_time).last()
     context['blog'] = blog
-    context['login_form'] = LoginForm()
     response = render(request,'blog/blog_detail.html',context) # 响应
     response.set_cookie(read_cookie_key,'true') # 添加阅读cookie
     return response
+
+class blog_detail(DetailView):
+    model = Blog
+    template_name = 'blog/blog_detail.html'
+    context_object_name = 'blog'
+
+    def get_object(self):
+        obj = super(blog_detail, self).get_object()
+        read_session_key = add_once_read(self.request,obj)
+        self.request.session[read_session_key] = 'true'  # 添加阅读cookie
+        return obj
+    def get_context_data(self, **kwargs):
+        context = super(blog_detail, self).get_context_data()
+        context['previous_page'] = Blog.objects.filter(created_time__lt=context['blog'].created_time).first()
+        context['next_page'] = Blog.objects.filter(created_time__gt=context['blog'].created_time).last()
+        return context

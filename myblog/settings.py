@@ -72,6 +72,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'user.context_processors.login_modal_form',
             ],
         },
     },
@@ -137,7 +138,7 @@ USE_TZ = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
-
+# 配置静态文件地址
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'static'),
@@ -188,5 +189,41 @@ CKEDITOR_CONFIGS = {
     }
 }
 
-#每页多少条数据
+# 每页多少条数据
 CONTENT_OF_EACH_PAGE = 7
+
+# session 配置
+#session不仅可以保存在数据库里，
+#数据库（默认）
+#缓存（memchache、redis）
+#文件
+#缓存+数据库
+#加密cookie
+
+#SESSION_ENGINE = 'django.contrib.sessions.backends.file'  # 引擎
+#SESSION_FILE_PATH = 文件路径  # 缓存文件路径，如果为None，则使用tempfile模块获取一个临时地址tempfile.gettempdir()
+#如：/var/folders/d3/j9tj0gz93dg06bmwxmhh6_xm0000gn/T
+#SESSION_COOKIE_NAME="SSSSSSSID"  # Session的cookie保存在浏览器上时的key，即：sessionid＝随机字符串
+#SESSION_COOKIE_PATH="/"  # Session的cookie保存的路径
+#SESSION_COOKIE_DOMAIN = None  # Session的cookie保存的域名
+#SESSION_COOKIE_SECURE = False  # 是否Https传输cookie
+#SESSION_COOKIE_HTTPONLY = True  # 是否Session的cookie只支持http传输
+SESSION_COOKIE_AGE = 86400  # Session的cookie失效日期（24小时） 默认1209600秒（两周）
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  # 是否关闭浏览器使Session过期,和上面一条不能共存
+SESSION_SAVE_EVERY_REQUEST = True
+#如果你设置了session的过期时间为30分钟，30分钟后session准时失效
+#如果该参数设置为True，在30分钟期间有请求服务端，就不会过期！（为什么逛一晚上淘宝，也不会登出，但是浏览器不刷新了就会自动登出）
+
+#下面这个方法不是在settings中用的
+
+#request.session.set_expiry(value)
+
+#你可以传递四种不同的值给它：
+
+# * 如果value是个整数，session会在秒数后失效（适用于整个Django框架，即这个数值时效时整个页面都会session失效）。
+
+#* 如果value是个datatime或timedelta，session就会在这个时间后失效。
+
+#* 如果value是0,用户关闭浏览器session就会失效。
+
+# * 如果value是None,session会依赖全局session失效策略。

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}个人资料{% endblock %}
+{% block login_active %}active{% endblock %}
+
+{% block content %}
+    <div class="container" style="margin-top: 10px;">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                {% if user.is_authenticated %}
+                    <h2>{{ user.username }}</h2>
+                    <ul>
+                        <li>昵称：<a href="">修改昵称</a></li>
+                        <li>邮箱：{% if user.email %}{{ user.email }}{% else %}未绑定<a href="">绑定邮箱</a>{% endif %}</li>
+                        <li>上一次登录时间：{{ user.last_login|date:'Y-m-d H:i:s' }}</li>
+                        <li><a href="">修改密码</a></li>
+                    </ul>
+                {% else %}
+                    <span>您还没有登录，请先登录！</span>
+                    <script>
+                        window.location.href = '/'
+                    </script>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script_extends %}
+{% endblock %}

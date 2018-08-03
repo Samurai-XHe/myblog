@@ -37,27 +37,80 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li role="presentation" class="">
-                                <a href="{% url 'logout' %}?from={{ request.get_full_path }}">退出</a>
+                                <a href="{% url 'user:user_info' %}">个人资料</a>
                             </li>
                             <li role="presentation" class="">
                                 <a href="{% url 'admin:index' %}">后台管理</a>
+                            </li>
+                            <li role="presentation" class="">
+                                <a href="{% url 'user:logout' %}?from={{ request.get_full_path }}">退出</a>
                             </li>
                         </ul>
                     </li>
                 {% else %}
                     <li role="presentation" class="{% block register_active %}{% endblock %} pull-right">
-                        <a href="{% url 'register' %}?from={{ request.get_full_path }}">注册</a>
+                        <a href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a>
                     </li>
                     <li role="presentation" class="{% block login_active %}{% endblock %} pull-right">
-                        <a href="{% url 'login' %}?from={{ request.get_full_path }}">登录</a>
+                        <a href="{% url 'user:login' %}?from={{ request.get_full_path }}">登录</a>
                     </li>
                 {% endif %}
 
             </ul>
         </div>
-
     </div>
-    {% block content %}{% endblock %}
-    {% block script_extends %}{% endblock %}
+    {% block content %}
+
+    {% endblock %}
+    <!-- Modal -->
+    <div class="modal fade" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+                <form id="login_modal_form" action="" method="POST">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">登录</h4>
+                    </div>
+                    <div class="modal-body">
+                        {% csrf_token %}
+                        {% for field in login_modal_form %}
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                        {% endfor %}
+                        <span id="login_modal_tip" class="text-danger">{{ login_form.non_field_errors }}</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary">登录</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        //模态框表单提交
+        $('#login_modal_form').submit(function () {
+            //event.preventDefault();另一种阻止提交的方法，上面function的括号内也要加event
+            $('#login_modal_tip').text('');
+            $.ajax({
+                url:"{% url 'user:login_for_modal' %}",
+                type:'POST',
+                cache:false,
+                data:$(this).serialize(),
+                success:function (data) {
+                    console.log(data)
+                    if (data['status'] == 'SUCCESS'){
+                        window.location.reload();
+                    }else{
+                        $('#login_modal_tip').text('用户名或密码不正确');
+                    }
+                }
+            });
+            return false;
+        });
+    </script>
+    {% block script_extends %}
+
+    {% endblock %}
 </body>
 </html>

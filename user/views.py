@@ -30,6 +30,10 @@ def login_for_modal(request):
         data['status'] = 'ERROR'
     return JsonResponse(data)
 
+def user_info(request):
+    return render(request,'user/user_info.html')
+
+
 def logout(request):
     auth.logout(request)
     return redirect(request.GET.get('from',reverse('index')))
