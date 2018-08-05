@@ -27,9 +27,19 @@
                         </div>
                     </div>
                 {% else %}
-                    <span>已登录，正在跳转到首页...</span>
+                    <span>您已登录，<span id="time"></span>秒后跳转到首页......</span>
                     <script>
-                        window.location.href = '/';
+                        var timeout = 5;
+                        function showError() {
+                            document.getElementById("time").innerHTML = timeout;
+                            timeout--;
+                            if (timeout == 0) {
+                                window.location.href = "/";
+                            } else {
+                                setTimeout("showError()", 1000);
+                            }
+                        }
+                        showError();
                     </script>
                 {% endif %}
             </div>

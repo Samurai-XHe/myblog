@@ -61,7 +61,7 @@
                             </a>
                         </li>
                     {% else %}
-                        <li class="pull-right"><a href="#">没有了 <span aria-hidden="true"></span></a></li>
+                        <li class="pull-right"><a href="javascript:void(0)">下一篇：没有了 <span aria-hidden="true"></span></a></li>
                     {% endif %}
                     {% if previous_page %}
                       <li class="pull-right">
@@ -70,7 +70,7 @@
                           </a>
                       </li>
                     {% else %}
-                      <li class="pull-right"><a href="#"><span aria-hidden="true"></span> 没有了</a></li>
+                      <li class="pull-right"><a href="javascript:void(0)"><span aria-hidden="true"></span> 上一篇：没有了</a></li>
                     {% endif %}
               </ul>
             </nav>
@@ -80,7 +80,7 @@
                 <div class="panel-heading">评论区</div>
                 <div class="panel-body">
                     {% if user.is_authenticated %}
-                        <label>{{ user.username }}欢迎评论!</label>
+                        <label>{{ user.get_nickname_or_username }}&nbsp;&nbsp;欢迎评论!</label>
                         <form id="comment_form" action="{% url 'update_comment' %}" method="POST">
                             <div id="reply_comment_container" style="display: none;">
                                 <p>回复：</p>
@@ -113,7 +113,7 @@
                                             <span>喜欢</span>
                                         </button>
                                     </div>
-                                    <span>{{ comment.user.username }} 评论于 {{ comment.comment_time|date:'Y-m-d H:i' }}</span>
+                                    <span>{{ comment.user.get_nickname_or_username }} 评论于 {{ comment.comment_time|date:'Y-m-d H:i' }}</span>
                                     <span><a href="javascript:reply({{ comment.pk }});">回复</a></span>
                                     <div id="comment_{{ comment.pk }}">
                                         {{ comment.text|safe }}
@@ -128,9 +128,9 @@
                                                         <span>喜欢</span>
                                                     </button>
                                                 </div>
-                                                <span>{{ reply.user.username }} 于 {{ reply.comment_time|date:'Y-m-d H:i' }}</span>
+                                                <span>{{ reply.user.get_nickname_or_username }} 于 {{ reply.comment_time|date:'Y-m-d H:i' }}</span>
                                                 <span>回复：</span>
-                                                <span>{{ reply.reply_to.username }}</span>
+                                                <span>{{ reply.reply_to.get_nickname_or_username }}</span>
                                                 <span>
                                                     <a href="javascript:reply({{ reply.pk }});">回复</a>
                                                 </span>

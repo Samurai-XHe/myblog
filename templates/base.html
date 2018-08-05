@@ -33,15 +33,17 @@
                 {% if user.is_authenticated %}
                     <li role="presentation" class="dropdown pull-right">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                          欢迎您 {{ user.username }}<span class="caret"></span>
+                          欢迎您 {{ user.get_nickname_or_username }}<span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li role="presentation" class="">
-                                <a href="{% url 'user:user_info' %}">个人资料</a>
+                                <a href="{% url 'user:user_info' %}">个人空间</a>
                             </li>
-                            <li role="presentation" class="">
-                                <a href="{% url 'admin:index' %}">后台管理</a>
-                            </li>
+                            {% if user.is_staff %}
+                                <li role="presentation" class="">
+                                    <a href="{% url 'admin:index' %}">后台管理</a>
+                                </li>
+                            {% endif %}
                             <li role="presentation" class="">
                                 <a href="{% url 'user:logout' %}?from={{ request.get_full_path }}">退出</a>
                             </li>
