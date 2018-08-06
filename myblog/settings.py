@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os,re
+from .base_settings import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@nm8)z+w06b*5l(qbmgf2vkjav1p#4yq#erc(7z2u^-=ijos3t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -216,3 +217,14 @@ SESSION_SAVE_EVERY_REQUEST = True
 #* 如果value是0,用户关闭浏览器session就会失效。
 
 # * 如果value是None,session会依赖全局session失效策略。
+
+# 发送邮件设置
+# https://docs.djangoproject.com/en/2.0/ref/settings/#email
+# https://docs.djangoproject.com/en/2.0/topics/email/
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_PORT = 25
+EMAIL_HOST_USER = '847834358@qq.com'
+EMAIL_HOST_PASSWORD = 'baqetiyucxsqbeai'  # 授权码
+EMAIL_SUBJECT_PREFIX = '[这是什么？] '
+EMAIL_USE_TLS = True  # 与SMTP服务器通信时，是否启动TLS链接(安全链接)

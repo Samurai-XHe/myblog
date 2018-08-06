@@ -1,3 +1,3 @@
 db.sqlite3
-settings_dev.py
+base_settings.py
 __pycache__/

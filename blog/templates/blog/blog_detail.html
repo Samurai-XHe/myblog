@@ -96,8 +96,8 @@
                         </form>
                     {% else %}
                         <div class="alert alert-danger" role="alert">
-                            <a href="{% url 'user:login' %}?from={{ request.get_full_path }}">登录</a>
-                            后才能评论哦！，没有账号？
+                            <a href="" data-toggle="modal" data-target="#login_modal">登录</a>
+                            后才能评论哦！没有账号？
                             <a href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a>
                         </div>
                     {% endif %}

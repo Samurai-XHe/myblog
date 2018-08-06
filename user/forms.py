@@ -1,3 +1,4 @@
+import time
 from django import forms
 from django.core.validators import RegexValidator
 from django.contrib import auth
@@ -144,5 +145,52 @@ class ChangeNickNameForm(forms.Form):
         if nickname_new == '':
             raise forms.ValidationError('新的昵称不能为空')
         return nickname_new
+
+class BindEmailForm(forms.Form):
+    email = forms.EmailField(
+        label='邮箱地址',
+        widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'请输入邮箱地址'}),
+    )
+    verification_code = forms.CharField(
+        label='验证码',
+        required=False,
+        widget=forms.TextInput(attrs={'class':'form-control','placeholder':'点击“发送验证码”，输入您邮箱收到的四位验证码'}),
+    )
+    def __init__(self,*args,**kwargs):
+        if 'request' in kwargs:
+            self.request = kwargs.pop('request')
+        super(BindEmailForm, self).__init__(*args,**kwargs)
+
+    def clean(self):
+        # 判断用户是否登录
+        if self.request.user.is_authenticated:
+           self.cleaned_data['user'] = self.request.user
+        else:
+            raise forms.ValidationError('您没有登录，请先登录')
+        # 判断用户是否已绑定邮箱
+        if self.request.user.email != '':
+            raise forms.ValidationError('您已绑定过邮箱，不能重复绑定')
+        return self.cleaned_data
+
+    def clean_verification_code(self):
+        # 判断验证码
+        email = self.cleaned_data.get('email','')
+        print(email,'++++++++++++++++++++email')
+        code = self.request.session.get(email, '')
+        print(code,'++++++++++++++++++code')
+        verification_code = self.cleaned_data.get('verification_code').strip()
+        print(verification_code,'++++++++++++++++++++++ver')
+        if verification_code == '':
+            raise forms.ValidationError('验证码不能为空')
+        if code != verification_code:
+            raise forms.ValidationError('验证码不正确')
+
+        # 验证码时效验证
+        now = int(time.time())
+        send_code_time = self.request.session.get('send_code_time', 0)
+        if now - send_code_time > 300:
+            raise forms.ValidationError('填写验证码超时，请重新获取验证码')
+        return verification_code
+
 
 

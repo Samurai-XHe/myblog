@@ -1,10 +1,12 @@
+import random,time,string
 from django.shortcuts import render,redirect
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
-from .forms import LoginForm,RegisterForm,ChangeNickNameForm
+from django.core.mail import send_mail
+
+from .forms import LoginForm,RegisterForm,ChangeNickNameForm,BindEmailForm
 from .models import Profile
 
 def login(request):
@@ -79,3 +81,56 @@ def change_nickname(request):
     context['submit_text'] = '修改'
     context['return_back'] = redirect_to
     return render(request,'form.html',context)
+
+def bind_email(request):
+    redirect_to = request.GET.get('from', reverse('index'))
+    if request.method == 'POST':
+        form = BindEmailForm(request.POST,request=request)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            request.user.email = email
+            request.user.save()
+            return redirect(redirect_to)
+    else:
+        form = BindEmailForm()
+    context = {}
+    context['form'] = form
+    context['page_title'] = '绑定邮箱'
+    context['form_title'] = '绑定邮箱'
+    context['submit_text'] = '绑定'
+    context['return_back'] = redirect_to
+    return render(request,'user/bind_email.html',context)
+
+def send_verification_code(request):
+    email = request.GET.get('email','None')
+    data = {}
+    if email == '':
+        data['status'] = 'ERROR'
+        data['code'] = '401'
+        data['message'] = '邮箱不能为空'
+    else:
+        if User.objects.filter(email=email).exists():
+            data['status'] = 'ERROR'
+            data['code'] = '402'
+            data['message'] = '该邮箱已被使用，请换一个邮箱地址'
+        else:
+            code = ''.join(random.sample(string.ascii_letters + string.digits, 4))
+            now = int(time.time())
+            send_code_time = request.session.get('send_code_time',0)
+            if now - send_code_time < 60:
+                data['status'] = 'ERROR'
+                data['code'] = '403'
+                data['message'] = '您操作太频繁了'
+            else:
+                request.session[email] = code
+                request.session['send_code_time'] = now
+                send_mail(
+                    '绑定邮箱',
+                    '您的验证码：%s' % code,
+                    '847834358@qq.com',
+                    [email],
+                    fail_silently=False,
+                )
+                data['status'] = 'SUCCESS'
+    return JsonResponse(data)
+
