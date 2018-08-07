@@ -1,4 +1,4 @@
-import random,time,string
+import random,time,string,re
 from django.shortcuts import render,redirect
 from django.contrib import auth
 from django.contrib.auth.models import User
@@ -90,6 +90,7 @@ def bind_email(request):
             email = form.cleaned_data['email']
             request.user.email = email
             request.user.save()
+            del request.session[email]
             return redirect(redirect_to)
     else:
         form = BindEmailForm()
@@ -108,6 +109,10 @@ def send_verification_code(request):
         data['status'] = 'ERROR'
         data['code'] = '401'
         data['message'] = '邮箱不能为空'
+    elif not re.search(r'^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$',email):
+        data['status'] = 'ERROR'
+        data['code'] = '400'
+        data['message'] = '请输入正确的邮箱地址'
     else:
         if User.objects.filter(email=email).exists():
             data['status'] = 'ERROR'
@@ -117,7 +122,7 @@ def send_verification_code(request):
             code = ''.join(random.sample(string.ascii_letters + string.digits, 4))
             now = int(time.time())
             send_code_time = request.session.get('send_code_time',0)
-            if now - send_code_time < 60:
+            if now - send_code_time < 30:
                 data['status'] = 'ERROR'
                 data['code'] = '403'
                 data['message'] = '您操作太频繁了'

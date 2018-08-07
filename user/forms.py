@@ -192,5 +192,6 @@ class BindEmailForm(forms.Form):
             raise forms.ValidationError('填写验证码超时，请重新获取验证码')
         return verification_code
 
-
+class ChangePassWordFormk(forms.Form):
+    pass
 

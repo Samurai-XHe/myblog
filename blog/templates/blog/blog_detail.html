@@ -61,7 +61,11 @@
                             </a>
                         </li>
                     {% else %}
-                        <li class="pull-right"><a href="javascript:void(0)">下一篇：没有了 <span aria-hidden="true"></span></a></li>
+                        <li class="pull-right" style="margin-left: 20px;">
+                            <a href="javascript:void(0)">下一篇：没有了
+                                <span aria-hidden="true"></span>
+                            </a>
+                        </li>
                     {% endif %}
                     {% if previous_page %}
                       <li class="pull-right">
@@ -70,7 +74,11 @@
                           </a>
                       </li>
                     {% else %}
-                      <li class="pull-right"><a href="javascript:void(0)"><span aria-hidden="true"></span> 上一篇：没有了</a></li>
+                        <li class="pull-right">
+                          <a href="javascript:void(0)">
+                              <span aria-hidden="true"> 上一篇：没有了</span>
+                          </a>
+                      </li>
                     {% endif %}
               </ul>
             </nav>

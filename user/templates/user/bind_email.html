@@ -1,7 +1,7 @@
 {% extends 'form.html' %}
 
 {% block other_buttons %}
-    <button id="send_code" class="btn btn-primary">发送验证码</button>
+    <button id="send_code" type="button" class="btn btn-primary">发送验证码</button>
 {% endblock %}
 
 {% block script_extends %}
@@ -21,12 +21,15 @@
                         console.log(data)
                         $("#tip").text(data['message'])
                     }
+                },
+                error:function (xhr) {
+                    console.log(xhr)
                 }
             })
             // 把按钮变灰
             $(this).addClass('disabled');
             $(this).attr('disabled',true);
-            var time = 3;
+            var time = 30;
             $(this).text(time + 's');
             var interval = setInterval(() => {
                 if (time <= 0) {
