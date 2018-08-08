@@ -25,7 +25,7 @@
                                     未绑定<a href="{% url 'user:bind_email' %}?from={{ request.get_full_path }}" class="pull-right">绑定邮箱</a>{% endif %}
                                 </li>
                                 <li class="list-group-item">上一次登录时间：{{ user.last_login|date:'Y-m-d H:i:s' }}</li>
-                                <li class="list-group-item"><a href="">修改密码</a></li>
+                                <li class="list-group-item"><a href="{% url 'user:change_password' %}?from={{ request.get_full_path }}">修改密码</a></li>
                             </ul>
                         </div>
                     </div>

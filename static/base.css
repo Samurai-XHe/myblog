@@ -11,9 +11,12 @@ ul {
 ul.navbar-right {
     margin-right: 0;
 }
-div.day-hot {
-    padding-left: 0px;
+img {
+    width: 500px;
+    height: 300px!important;
 }
-div.month-hot {
-    padding-right: 0px;
+.carousel {
+    position: relative;
+    width: 500px;
+    height: 300px!important;
 }

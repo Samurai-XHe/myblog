@@ -7,8 +7,9 @@
 {% block script_extends %}
     <script>
         $('#send_code').click(function () {
-            var email = $('#id_email').val()
-            $("#tip").text('')
+            var email = $('#id_email').val();
+            $("#tip").text('');
+            $("#success").text('');
             $.ajax({
                 url:'{% url 'user:send_verification_code' %}',
                 type:'GET',
@@ -17,8 +18,11 @@
                 success:function (data) {
                     if (data['code'] == '402'){
                         $("#tip").text(data['message'])
-                    }else{
-                        console.log(data)
+                    }
+                    if (data['status'] == 'SUCCESS'){
+                        $("#success").text(data['message'])
+                    } else{
+                        console.log(data);
                         $("#tip").text(data['message'])
                     }
                 },
