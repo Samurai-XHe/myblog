@@ -21,7 +21,7 @@
                                 </li>
                                 <li class="list-group-item">
                                     邮&nbsp;&nbsp;&nbsp;箱：{% if user.email %}{{ user.email }}
-                                    <a class="pull-right">解绑</a> {% else %}
+                                    <a class="pull-right">更换邮箱</a> {% else %}
                                     未绑定<a href="{% url 'user:bind_email' %}?from={{ request.get_full_path }}" class="pull-right">绑定邮箱</a>{% endif %}
                                 </li>
                                 <li class="list-group-item">上一次登录时间：{{ user.last_login|date:'Y-m-d H:i:s' }}</li>

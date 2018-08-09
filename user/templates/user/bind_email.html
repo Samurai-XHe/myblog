@@ -10,6 +10,7 @@
             var email = $('#id_email').val();
             $("#tip").text('');
             $("#success").text('');
+            $("p.text-danger").text('');
             $.ajax({
                 url:'{% url 'user:send_verification_code' %}',
                 type:'GET',

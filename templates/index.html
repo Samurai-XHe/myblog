@@ -13,27 +13,33 @@
                         <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
                         <li data-target="#carousel-example-generic" data-slide-to="1"></li>
                         <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="3"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="4"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="5"></li>
+                        <li data-target="#carousel-example-generic" data-slide-to="6"></li>
                     </ol>
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner" role="listbox">
-                        <div class="item active">
-                            <img src="http://ww3.sinaimg.cn/mw600/0073ob6Pgy1fu26mmm7wkj31kw0vzqv5.jpg" alt="...">
-                            <div class="carousel-caption">
-                                <h4>雾霾</h4>
+                        {% for blog in month_hot_blogs %}
+                            {% if forloop.first %}
+                                <div class="item active">
+                            {% else %}
+                                <div class="item">
+                            {% endif %}
+                                <img src="{% static 'img/code.jpg' %}" alt="...">
+                                <div class="carousel-caption">
+                                    <h4>{{ blog.title }}</h4>
+                                    <p>{{ blog.content| striptags |truncatechars:70 }}</p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="item">
-                            <img src="http://wx3.sinaimg.cn/mw600/bcc93f49gy1fu259jcnclj20kb0xcwhu.jpg" alt="..." class="img-responsive">
-                            <div class="carousel-caption">
-                                <h4>布偶</h4>
+                        {% empty %}
+                            <div class="item active">
+                                <img src="{% static 'img/timg.jpg' %}" alt="...">
+                                <div class="carousel-caption">
+                                    <h4>雾霾</h4>
+                                </div>
                             </div>
-                        </div>
-                        <div class="item">
-                            <img src="http://wx2.sinaimg.cn/mw600/00745YaMgy1fu29blee5jj30go0bmt9l.jpg" alt="...">
-                            <div class="carousel-caption">
-                                <h4>neko</h4>
-                            </div>
-                        </div>
+                        {% endfor %}
                     </div>
                     <!-- Controls -->
                     <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">

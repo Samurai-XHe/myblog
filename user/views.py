@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.http import JsonResponse
 from django.core.mail import send_mail
 
-from .forms import LoginForm,RegisterForm,ChangeNickNameForm,BindEmailForm,ChangePassWordFormk,ForgetPasswordForm
+from .forms import LoginForm,RegisterForm,ChangeNickNameForm,BindEmailForm,ChangePassWordFormk,ForgetPasswordForm,ChangeForgetPasswordForm
 from .models import Profile
 
 def login(request):
@@ -42,9 +42,9 @@ def logout(request):
     return redirect(request.GET.get('from',reverse('index')))
 
 def register(request):
-    referer = request.GET.get('from')
+    redirect_to = request.GET.get('from',reverse('index'))
     if request.method == 'POST':
-        register_form = RegisterForm(request.POST)
+        register_form = RegisterForm(request.POST,request=request)
         if register_form.is_valid():
             username = register_form.cleaned_data['username']
             password = register_form.cleaned_data['password']
@@ -55,12 +55,55 @@ def register(request):
             # 顺便登录
             user = auth.authenticate(username=username,password=password)
             auth.login(request,user)
-            return redirect(referer,'/')
+            return redirect(redirect_to,'/')
     else:
         register_form = RegisterForm()
     context = {}
-    context['register_form'] = register_form
+    context['form'] = register_form
+    context['page_title'] = '欢迎注册'
+    context['form_title'] = '欢迎注册'
+    context['submit_text'] = '注册'
+    context['return_back'] = redirect_to
     return render(request,'user/register.html',context)
+
+def register_code(request):
+    email = request.GET.get('email', 'None')
+    data = {}
+    if email == '':
+        data['status'] = 'ERROR'
+        data['code'] = '401'
+        data['message'] = '邮箱不能为空'
+    elif not re.search(r'^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$', email):
+        data['status'] = 'ERROR'
+        data['code'] = '400'
+        data['message'] = '请输入正确的邮箱地址'
+    else:
+        if User.objects.filter(email=email).exists():
+            data['status'] = 'ERROR'
+            data['code'] = '402'
+            data['message'] = '该邮箱已被使用，请换一个邮箱地址'
+        else:
+            code = ''.join(random.sample(string.ascii_letters + string.digits, 4))
+            now = int(time.time())
+            send_code_time = request.session.get('send_code_time', 0)
+            if now - send_code_time < 30:
+                data['status'] = 'ERROR'
+                data['code'] = '403'
+                data['message'] = '您操作太频繁了'
+            else:
+                request.session[email] = code
+                request.session['send_code_time'] = now
+                request.session['email'] = email
+                send_mail(
+                    '绑定邮箱',
+                    '您的验证码：%s' % code,
+                    '847834358@qq.com',
+                    [email],
+                    fail_silently=False,
+                )
+                data['status'] = 'SUCCESS'
+                data['message'] = '发送成功'
+    return JsonResponse(data)
 
 def change_nickname(request):
     redirect_to = request.GET.get('from',reverse('index'))
@@ -152,7 +195,7 @@ def change_password(request):
             user = form.cleaned_data['user']
             user.set_password(new_password)
             user.save()
-            return redirect(redirect_to)
+            return redirect(reverse('user:login'))
     else:
         form = ChangePassWordFormk()
     context = {}
@@ -171,10 +214,9 @@ def forget_password(request):
         if form.is_valid():
             email = form.cleaned_data['email']
             del request.session[email]
-            del request.session['email']
             del request.session['send_code_time']
             del request.session['username_or_email']
-            return redirect(reverse('index'))
+            return redirect(reverse('user:change_forget_password'))
     else:
         form = ForgetPasswordForm()
     context['form'] = form
@@ -242,4 +284,27 @@ def send_verification_code_forget(request):
             data['status'] = 'SUCCESS'
             data['message'] = '发送成功'
     return JsonResponse(data)
+
+def change_forget_password(request):
+    context ={}
+    if request.session.get('email', '') != '':
+        if request.method == 'POST':
+            email = request.session['email']
+            del request.session['email']
+            form = ChangeForgetPasswordForm(request.POST)
+            if form.is_valid():
+                new_password = form.cleaned_data['new_password']
+                user = User.objects.get(email=email)
+                user.set_password(new_password)
+                user.save()
+                return redirect(reverse('user:login'))
+        else:
+            form = ChangeForgetPasswordForm()
+        context['form'] = form
+        context['page_title'] = '重置密码'
+        context['form_title'] = '重置密码'
+        context['submit_text'] = '提交'
+        return render(request,'user/change_forget_password.html',context)
+    else:
+        return redirect(reverse('index'))
 
