@@ -23,7 +23,7 @@
                                 <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">
                                     {{ blog.blog_type.type_name }}
                                 </a>
-                                &nbsp;&nbsp;&nbsp;作者：{{ blog.author }}
+                                &nbsp;&nbsp;&nbsp;作者：{{ blog.author.get_nickname_or_username }}
                             </p>
                         </div>
                         <div class="row">

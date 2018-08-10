@@ -90,6 +90,16 @@
         </div>
     </div>
     <script>
+        $(function () {
+            if ($('body').hasClass('modal-open')){
+                setTimeout(
+                    function () {
+                        $('#id_username').focus();
+                    },1000
+                )
+            }
+        })
+
         //模态框表单提交
         $('#login_modal_form').submit(function () {
             //event.preventDefault();另一种阻止提交的方法，上面function的括号内也要加event

@@ -22,6 +22,10 @@ def update_comment(request):
             comment.reply_to = parent.user
         comment.save()
 
+        #发送邮件通知
+        comment.send_email()
+
+
         #返回数据
         data['status'] = 'SUCCESS'
         data['username'] = comment.user.get_nickname_or_username()

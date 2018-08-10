@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.fields import GenericRelation
+from django.urls import reverse
 from ckeditor_uploader.fields import RichTextUploadingField
 from read_statistics.models import GetReadCount,OneDayReadCount
 
@@ -21,5 +22,12 @@ class Blog(models.Model,GetReadCount):
 
     def __str__(self):
         return '<Blog: %s>' % self.title
+
+    def get_url(self):
+        return reverse('blog_detail',kwargs={'pk':self.pk})
+
+    def get_email(self):
+        return self.author.email
+
     class Meta:
         ordering = ['-created_time']
