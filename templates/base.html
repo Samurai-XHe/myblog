@@ -15,50 +15,63 @@
 <body>
     <div class="container">
         <div class="row">
-            <div class="page-header" style="border-bottom:0px">
-              <h1>My first blog ! <small></small></h1>
-            </div>
-        </div>
-        <div class="row">
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="{% block home_active %}{% endblock %}">
-                    <a href="{% url 'index' %}">首页</a>
-                </li>
-                <li role="presentation" class="{% block blog_active %}{% endblock %}">
-                    <a href="{% url 'blog_list' %}">博客</a>
-                </li>
-                <li role="presentation" class="{% block beautiful_picture_active %}{% endblock %}">
-                    <a href="#">美图</a>
-                </li>
-                {% if user.is_authenticated %}
-                    <li role="presentation" class="dropdown pull-right">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button">
-                          欢迎您 {{ user.get_nickname_or_username }}<span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li role="presentation" class="">
-                                <a href="{% url 'user:user_info' %}">个人空间</a>
+            <nav class="navbar navbar-default navbar-fixed-top">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{% url 'index' %}">XHE的个人博客</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li class="{% block home_active %}{% endblock %}">
+                                <a href="{% url 'index' %}">首页 <span class="sr-only">(current)</span></a>
                             </li>
-                            {% if user.is_staff %}
-                                <li role="presentation" class="">
-                                    <a href="{% url 'admin:index' %}">后台管理</a>
-                                </li>
-                            {% endif %}
-                            <li role="presentation" class="">
-                                <a href="{% url 'user:logout' %}?from={{ request.get_full_path }}">退出</a>
+                            <li class="{% block blog_active %}{% endblock %}">
+                                <a href="{% url 'blog_list' %}">博客</a>
                             </li>
                         </ul>
-                    </li>
-                {% else %}
-                    <li role="presentation" class="{% block register_active %}{% endblock %} pull-right">
-                        <a href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a>
-                    </li>
-                    <li role="presentation" class="{% block login_active %}{% endblock %} pull-right">
-                        <a href="{% url 'user:login' %}?from={{ request.get_full_path }}">登录</a>
-                    </li>
-                {% endif %}
 
-            </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            {% if user.is_authenticated %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        欢迎您 {{ user.get_nickname_or_username }} <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="{% url 'user:user_info' %}">个人资料</a></li>
+                                        {% if user.is_staff %}
+                                            <li><a href="{% url 'admin:index' %}">后台管理</a></li>
+                                        {% endif %}
+                                        <li role="separator" class="divider"></li>
+                                        <li><a href="{% url 'user:logout' %}?from={{ request.get_full_path }}">退出</a></li>
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li class="{% block login_active %}{% endblock %}">
+                                    <a href="{% url 'user:login' %}?from={{ request.get_full_path }}">登录</a>
+                                </li>
+                                <li class="{% block register_active %}{% endblock %}">
+                                    <a href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        <form class="navbar-form navbar-right">
+                            <div class="form-group">
+                            <input type="text" class="form-control" placeholder="站内博客">
+                            </div>
+                            <button type="submit" class="btn btn-default">搜索</button>
+                        </form>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav>
         </div>
     </div>
     {% block content %}

@@ -12,11 +12,6 @@ ul.navbar-right {
     margin-right: 0;
 }
 img {
-    width: 500px;
-    height: 300px!important;
-}
-.carousel {
-    position: relative;
-    width: 500px;
+    width: 600px;
     height: 300px!important;
 }
