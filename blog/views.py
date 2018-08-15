@@ -82,11 +82,10 @@ def blog_detail_0(request,blog_pk):
     response.set_cookie(read_cookie_key,'true') # 添加阅读cookie
     return response
 
-class blog_detail(DetailView):
+class blog_detail(DetailView):  #还不如原来的方法，通用视图是django最没用的一个功能
     model = Blog
     template_name = 'blog/blog_detail.html'
     context_object_name = 'blog'
-
     def get_object(self):
         obj = super(blog_detail, self).get_object()
         read_session_key = add_once_read(self.request,obj)

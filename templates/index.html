@@ -2,8 +2,49 @@
 {% load staticfiles %}
 {% block title %}这里是首页哦！{% endblock %}
 {% block home_active %}active{% endblock %}
-
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'index.css' %}">
+{% endblock %}
 {% block content %}
+    <section class="home">
+        <div class="lvjing">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1 title_text">
+                        <h1>人间五十年，如梦亦如幻</h1>
+                        <img class="img-responsive title_img" src="{% static 'img/hua.jpg' %}" alt="timg">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container two">
+            <div class="row">
+                <div class="col-md-4">
+                    <a href="">
+                        <img class="img-responsive" src="{% static 'img/google.jpg' %}" alt="google">
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Google Chrome的设计超级简洁，
+                        使用起来更加方便。谷歌浏览器最大的亮点就是其多进程架构，保护其不会因恶意网页和应用软件而崩溃。</p>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="">
+                        <img class="img-responsive" src="{% static 'img/fox.jpg' %}" alt="fox">
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;采用了实力强悍的新型引擎，更具性能优势。
+                        页面载入更好、更快，占用内存更少。出色的设计，灵动的功能，让上网体验更智能。</p>
+                    </a>
+                </div>
+                <div class="col-md-4">
+                    <a href="">
+                        <img class="img-responsive" src="{% static 'img/safari.jpg' %}" alt="safari">
+                        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Safari 浏览器。它不仅速度更快，而且能效出色，
+                        从而令网站的响应更灵敏，笔记本电脑电池单次充电的运行时间也更长。</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
     <div class="container" style="margin-top: 10px">
         <div class="row" style="margin-bottom: 20px">
             <div class="col-md-6">
