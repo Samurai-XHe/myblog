@@ -23,10 +23,11 @@ div.carousel-inner img {
 
     width: 800px;
     height: 600px;
+    -webkit-filter: blur(3px);
     filter: blur(3px);
 }
-div.two {
-    padding-top: 80px;
+section.driver {
+    padding: 50px 0px;
 }
 div.col-md-4 img {
     margin:0 auto;
@@ -38,6 +39,27 @@ div.col-md-4 a {
     color: #333333;
 }
 div.col-md-4:hover {
-    background-color: #E7E7E7;
-    box-shadow: 1px 2px 3px #666;
+    background-color: #c0c0c066;
+    box-shadow: 1px 1px 3px #666;
+}
+section.html5 {
+    background-color: #6262621a;
+    padding:10px 5px;
+}
+section.html5 span,section.bootstarp span{
+    margin-right: 20px;
+    background: rgba(42, 234, 187, 0.89);
+    padding: 10px;
+    border-radius: 30px;
+    font-size: 25px;
+}
+section.html5 h3,section.bootstarp h3 {
+    font-weight: bold;
+}
+section.html5 p,section.bootstarp p {
+    line-height:25px;
+}
+section.html5 img,section.bootstarp img {
+    width: 600px;
+    height:300px;
 }

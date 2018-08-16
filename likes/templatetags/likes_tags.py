@@ -14,8 +14,8 @@ def get_content_type(obj):
     content_type = ContentType.objects.get_for_model(obj)
     return content_type.model
 
-@register.simple_tag(takes_context=True)
-def get_like_status(context,obj):
+@register.simple_tag(takes_context=True)   # takes_context=True 能使用模板内的所有context内的属性
+def get_like_status(context,obj):  # 当使用takes_context=True时函数的第一个参数必须是context
     content_type = ContentType.objects.get_for_model(obj)
     user = context['user']
     if not user.is_authenticated:
