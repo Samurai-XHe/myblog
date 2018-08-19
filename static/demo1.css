@@ -80,11 +80,11 @@ section#cursor .col-md-3 {
 section#cursor a {
     margin-top: 20px;
     background: none;
-    color: #66AFE9;
+    color: black;
     border-color: #66AFE9;
     border-radius: 0px;
     padding: 7px 30px;
-    transition-duration: 1s;
+    transition-duration: 0.3s;
 }
 section#cursor a:hover {
     background: #66AFE9;
@@ -108,6 +108,36 @@ section#app button {
 }
 section#app button:hover {
     background: #0b6ebd;
-    transition-duration: 1s;
+    transition:all 0.3s;
 }
+section#contact {
+    background: url("img/ttt.png")no-repeat;
+    background-size: cover;
+    height: 800px;
 
+}
+section#contact .container {
+    padding:200px 0px;
+}
+#contact h2{
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: white;
+}
+#contact address {
+    line-height: 40px;
+    color: white;
+}
+#contact input {
+    border-radius: 0px;
+    margin:15px 0px;
+}
+button.btn.btn-primary {
+    background: #66AFE9;
+    margin-top: 20px;
+    width: 150px;
+    transition: all 0.3s;
+}
+button.btn.btn-primary:hover {
+    background: #0b6ebd;
+}
