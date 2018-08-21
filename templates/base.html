@@ -15,7 +15,7 @@
 <body>
     <div class="container">
         <div class="row">
-            <nav id="nav" class="navbar navbar-default navbar-fixed-top">
+            <nav class="navbar navbar-default navbar-fixed-top">
                 <div class="container-fluid">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -38,7 +38,7 @@
                                 <a href="{% url 'demo1' %}">demo1</a>
                             </li>
                         </ul>
-                        <ul class="nav navbar-nav navbar-right">
+                        <ul id="nav" class="nav navbar-nav navbar-right">
                             {% block nav_extends %}
                                 {% if user.is_authenticated %}
                                 <li class="dropdown">
@@ -105,9 +105,8 @@
                         $('#id_username').focus();
                     },1000
                 )
-            };
+            }
         })
-
         //模态框表单提交
         $('#login_modal_form').submit(function () {
             //event.preventDefault();另一种阻止提交的方法，上面function的括号内也要加event
