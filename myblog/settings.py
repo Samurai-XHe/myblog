@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '@nm8)z+w06b*5l(qbmgf2vkjav1p#4yq#erc(7z2u^-=ijos3t'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'user',
     'likes',
+    'xnhoutai',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,115 @@
+{% extends 'xnhoutai/base.html' %}
+{% load staticfiles %}
+
+{% block head_extends %}
+    <link rel="stylesheet" href="{% static 'xnhoutai/home.css' %}">
+    <script src="{% static 'js/echarts.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="container xxx">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">网站数据统计</div>
+                    <div class="panel-body">
+                        <table class="table table-hover">
+                            <thead>
+                                <th>统计项目</th>
+                                <th>今日</th>
+                                <th>昨日</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <th>注册会员</th>
+                                    <td>200</td>
+                                    <td>400</td>
+                                </tr>
+                                <tr>
+                                    <th>登录会员</th>
+                                    <td>200</td>
+                                    <td>400</td>
+                                </tr>
+                                <tr>
+                                    <th>今日发帖</th>
+                                    <td>200</td>
+                                    <td>400</td>
+                                </tr>
+                                <tr>
+                                    <th>转载次数</th>
+                                    <td>200</td>
+                                    <td>400</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+             </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">网站热帖</div>
+                    <a href="#" class="list-group-item">Dapibus ac facilisis in</a>
+                    <a href="#" class="list-group-item">Morbi leo risus</a>
+                    <a href="#" class="list-group-item">Porta ac consectetur ac</a>
+                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                    <a href="#" class="list-group-item">Vestibulum at eros</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">今日访客统计</div>
+                    <div class="panel-body">
+                        <div id="main">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+            title : {
+                text: '用户访问来源',
+                subtext: '',
+                x:'center'
+            },
+            tooltip : {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: ['直接访问','邮件营销','联盟广告','视频广告','搜索引擎']
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius : '55%',
+                    center: ['50%', '60%'],
+                    data:[
+                        {value:335, name:'直接访问'},
+                        {value:310, name:'邮件营销'},
+                        {value:234, name:'联盟广告'},
+                        {value:135, name:'视频广告'},
+                        {value:1548, name:'搜索引擎'}
+                    ],
+                    itemStyle: {
+                        emphasis: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    }
+                }
+            ]
+        };
+        window.onresize = myChart.resize;  //要想自适应就加这一句，并且不要设置容器（#main）的宽度。
+        myChart.setOption(option);
+
+    </script>
+{% endblock %}

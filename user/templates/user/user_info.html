@@ -14,6 +14,11 @@
                         </div>
                         <div class="panel-body">
                             <ul class="list-group">
+                                <li class="list-group-item">
+                                    <a href="">
+                                        <img class="img-responsive img-circle center-block" src="{{ user.get_avatar_url }}" alt="avatar">
+                                    </a>
+                                </li>
                                 <li class="list-group-item">用户名：{{ user.username }}</li>
                                 <li class="list-group-item">
                                     昵&nbsp;&nbsp;&nbsp;称：{{ user.get_nickname }}
