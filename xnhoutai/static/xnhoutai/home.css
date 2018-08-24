@@ -5,3 +5,13 @@
 #main {
     height:300px;
 }
+#pp {
+    height: 373px;
+}
+.col-md-7 img {
+    height:50px;
+    border-radius:10px;
+}
+.col-md-5 button {
+    margin: 10px 0px;
+}
