@@ -71,25 +71,24 @@ def blogs_with_date(request,year,month):
     context['blogs_date'] = "%s年%s月" %(year,month)
     return render(request,'blog/blogs_with_date.html',context)
 
-def blog_detail_0(request,blog_pk):
-    blog = get_object_or_404(Blog,pk=blog_pk)
-    read_cookie_key = add_once_read(request,blog)
+def blog_detail(request,pk):
+    blog = get_object_or_404(Blog,pk=pk)
+    read_session_key = add_once_read(request,blog)
     context = {}
     context['previous_page'] = Blog.objects.filter(created_time__lt=blog.created_time).first()
     context['next_page'] = Blog.objects.filter(created_time__gt=blog.created_time).last()
     context['blog'] = blog
-    response = render(request,'blog/blog_detail.html',context) # 响应
-    response.set_cookie(read_cookie_key,'true') # 添加阅读cookie
-    return response
+    request.session[read_session_key] = 'true'   # 添加阅读session
+    return render(request,'blog/blog_detail.html',context) # 响应
 
-class blog_detail(DetailView):  #还不如原来的方法，通用视图是django最没用的一个功能
+class blog_detail_0(DetailView):  #还不如原来的方法，通用视图是django最没用的一个功能
     model = Blog
     template_name = 'blog/blog_detail.html'
     context_object_name = 'blog'
     def get_object(self):
         obj = super(blog_detail, self).get_object()
         read_session_key = add_once_read(self.request,obj)
-        self.request.session[read_session_key] = 'true'  # 添加阅读cookie
+        self.request.session[read_session_key] = 'true'  # 添加阅读session
         return obj
     def get_context_data(self, **kwargs):
         context = super(blog_detail, self).get_context_data()
