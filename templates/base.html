@@ -44,7 +44,7 @@
                         <ul id="nav" class="nav navbar-nav navbar-right">
                             {% block nav_extends %}
                                 {% if user.is_authenticated %}
-                                    <li class="">
+                                    <li class="">                                                     {# user.profile.avatar.url #}
                                         <img id="title_avatar" class="img-circle img-responsive" src="{{ user.get_avatar_url }}" alt="avatar">
                                     </li>
                                     <li class="dropdown">

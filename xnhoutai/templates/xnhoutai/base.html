@@ -29,7 +29,10 @@
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
                             <li class="{% block home_active %}{% endblock %}">
-                                <a href="{% url 'index' %}">后台首页 <span class="sr-only">(current)</span></a>
+                                <a href="{% url 'xnhoutai:home' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;后台首页 </a>
+                            </li>
+                            <li class="{% block user_manage_active %}{% endblock %}">
+                                <a href="{% url 'xnhoutai:user_manage' %}"><span class="glyphicon glyphicon-"></span>&nbsp;&nbsp;用户管理</a>
                             </li>
                         </ul>
                         <ul id="nav" class="nav navbar-nav navbar-right">

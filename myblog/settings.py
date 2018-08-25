@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'user',
     'likes',
     'xnhoutai',
+    'imagekit',
 ]
 
 MIDDLEWARE = [
