@@ -13,7 +13,7 @@
                 <div class="list-group">
                     <a class="list-group-item" href="{% url 'xnhoutai:user_manage' %}">用户管理</a>
                     <a class="list-group-item active" href="{% url 'xnhoutai:user_serch' %}">用户搜索</a>
-                    <a class="list-group-item" href="">添加用户</a>
+                    <a class="list-group-item" href="" data-toggle="modal" data-target="#myModal">添加用户</a>
                 </div>
             </div>
             <div class="col-md-10">
@@ -22,7 +22,7 @@
                 <ul class="nav nav-tabs">
                     <li role="presentation" class=""><a href="{% url 'xnhoutai:user_manage' %}">用户列表</a></li>
                     <li role="presentation" class="active"><a href="{% url 'xnhoutai:user_serch' %}">用户搜索</a></li>
-                    <li role="presentation" class=""><a href="#">添加用户</a></li>
+                    <li role="presentation" class=""><a href="#" data-toggle="modal" data-target="#myModal">添加用户</a></li>
                 </ul>
                 <div class="col-md-12">
                     <form action="" class="form-group">
@@ -30,11 +30,11 @@
                         <p>技巧提示：支持模糊搜索和匹配搜索</p>
                     </div>
                     <label for="user_name">用户名</label>
-                    <input class="form-control" type="text" name="user_name">
+                    <input class="form-control" type="text" id="user_name">
                     <label for="UID">UID</label>
-                    <input class="form-control" type="text" name="UID">
+                    <input class="form-control" type="text" id="UID">
                     <label for="user_group">选择用户组</label>
-                    <select name="user_group" id="user_group" class="form-control">
+                    <select id="user_group" id="user_group" class="form-control">
                         <option value="superuser">超级管理员</option>
                         <option value="superuser">普通管理员</option>
                         <option value="superuser">用户</option>

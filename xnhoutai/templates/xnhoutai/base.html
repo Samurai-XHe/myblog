@@ -32,7 +32,10 @@
                                 <a href="{% url 'xnhoutai:home' %}"><span class="glyphicon glyphicon-home"></span>&nbsp;&nbsp;后台首页 </a>
                             </li>
                             <li class="{% block user_manage_active %}{% endblock %}">
-                                <a href="{% url 'xnhoutai:user_manage' %}"><span class="glyphicon glyphicon-"></span>&nbsp;&nbsp;用户管理</a>
+                                <a href="{% url 'xnhoutai:user_manage' %}"><span class="glyphicon glyphicon-user"></span>&nbsp;&nbsp;用户管理</a>
+                            </li>
+                            <li class="{% block context_manage_active %}{% endblock %}">
+                                <a href="{% url 'xnhoutai:context_manage' %}"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;内容管理</a>
                             </li>
                         </ul>
                         <ul id="nav" class="nav navbar-nav navbar-right">
@@ -69,6 +72,45 @@
     {% block content %}
 
     {% endblock %}
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+            <form action="">
+                <label for="user_name">用户名</label>
+                    <input class="form-control" type="text" id="user_name">
+                    <label for="passwd">用户密码</label>
+                    <input class="form-control" type="password" id="passwd">
+                    <label for="passwd——again">确认用户密码</label>
+                    <input class="form-control" type="password" id="again">
+                    <label for="email">用户邮箱</label>
+                    <input class="form-control" type="email" id="email">
+                    <label for="user_group">选择用户组</label>
+                    <select id="user_group" id="user_group" class="form-control">
+                        <option value="superuser">超级管理员</option>
+                        <option value="superuser">普通管理员</option>
+                        <option value="superuser">用户</option>
+                        <option value="superuser">无人权</option>
+                    </select>
+            </form>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="button" class="btn btn-primary">保存</button>
+      </div>
+    </div>
+  </div>
+</div>
 
     {% block script_extends %}
 
