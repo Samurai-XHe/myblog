@@ -38,6 +38,7 @@ def base_data(request,blogs):
                                          created_time__month=blog_date.month).count()
         blog_dates_dict[blog_date] = blog_count
 
+
     all_blogs = Blog.objects.all().count()
 
     # 获取每篇博客的评论数
