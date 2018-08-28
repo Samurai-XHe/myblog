@@ -11,16 +11,16 @@
         <div class="row">
             <div class="col-md-2">
                 <div class="list-group">
-                    <a class="list-group-item active" href="{% url 'xnhoutai:context_manage' %}">内容管理</a>
-                    <a class="list-group-item" href="">添加内容</a>
+                    <a class="list-group-item active" href="{% url 'xnhoutai:context_manage' %}">管理文章</a>
+                    <a class="list-group-item" href="{% url 'xnhoutai:add_content' %}">添加文章</a>
                 </div>
             </div>
             <div class="col-md-10">
-                <p>内容管理</p>
+                <h4>内容管理</h4>
                 <hr>
                 <ul class="nav nav-tabs">
-                    <li role="presentation" class="active"><a href="{% url 'xnhoutai:context_manage' %}">内容管理</a></li>
-                    <li role="presentation" class=""><a href="">添加内容</a></li>
+                    <li role="presentation" class="active"><a href="{% url 'xnhoutai:context_manage' %}">管理文章</a></li>
+                    <li role="presentation" class=""><a href="{% url 'xnhoutai:add_content' %}">添加文章</a></li>
                 </ul>
                 <table class="table">
                     <thead>
