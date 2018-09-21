@@ -11,9 +11,9 @@ class LoginForm(forms.Form):
         max_length=10,
         widget=forms.TextInput(attrs={'class':'form-control','placeholder':'请输入用户名'}),
         error_messages={
-            'required': '用户名不能为空!(这是forms字段验证)',
+            'required': '用户名不能为空!',
         },
-        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$','必须是字母开头的字母数字组合(这是validators)')]
+        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$','必须是字母开头的字母数字组合')]
     )
     password = forms.CharField(
         label='密码',
@@ -21,9 +21,9 @@ class LoginForm(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'请输入密码'}),
         error_messages = {
-            'required': '密码不能为空!(这是forms字段验证)',
+            'required': '密码不能为空!',
         },
-        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合(这是validators)')]
+        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')]
     )
 
     def clean(self):
@@ -31,7 +31,7 @@ class LoginForm(forms.Form):
         password = self.cleaned_data.get('password',' ')
         user = auth.authenticate(username=username,password=password)
         if user is None:
-            raise forms.ValidationError('用户名或密码错误(这是clean验证)')
+            raise forms.ValidationError('用户名或密码错误')
         else:
             self.cleaned_data['user'] = user
         return self.cleaned_data
@@ -52,7 +52,7 @@ class RegisterForm(forms.Form):
             'max_length':'不能超过10位',
             'min_length':'不能少于3位',
         },
-        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$', '必须是字母开头的字母数字组合(这是validators)')]
+        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$', '必须是字母开头的字母数字组合')]
     )
 
     password = forms.CharField(
@@ -70,7 +70,7 @@ class RegisterForm(forms.Form):
             'max_length': '不能超过23位',
             'min_length': '不能少于8位',
         },
-        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合(这是validators)')]
+        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')]
     )
     password_again = forms.CharField(
         label='再输一遍密码',
@@ -115,7 +115,7 @@ class RegisterForm(forms.Form):
         if username == '':
             raise forms.ValidationError('用户名不能为空')
         if User.objects.filter(username=username).exists():
-            raise forms.ValidationError('该用户名已存在(这是clean_username验证)')
+            raise forms.ValidationError('该用户名已存在')
         return username
 
     def clean_email(self):
@@ -132,7 +132,7 @@ class RegisterForm(forms.Form):
         if password == '':
             raise forms.ValidationError('密码不能为空')
         if password != password_again:
-            raise forms.ValidationError('两次输入的密码不一致(这是clean_password_again验证)')
+            raise forms.ValidationError('两次输入的密码不一致')
         return password_again
 
     def clean_verification_code(self):
@@ -246,7 +246,7 @@ class ChangePassWordFormk(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '请输入当前使用的密码'}),
         error_messages={
-            'required': '密码不能为空!(这是forms字段验证)',
+            'required': '密码不能为空!',
         },
     )
     new_password = forms.CharField(
@@ -255,9 +255,9 @@ class ChangePassWordFormk(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '8-23位字母开头的大小写字母和数字组合'}),
         error_messages={
-            'required': '新密码不能为空!(这是forms字段验证)',
+            'required': '新密码不能为空!',
         },
-        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合(这是validators)')]
+        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')]
     )
     new_password_again = forms.CharField(
         label='重复一次新密码',
@@ -265,7 +265,7 @@ class ChangePassWordFormk(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '请再次输入新密码'}),
         error_messages={
-            'required': '密码不能为空!(这是forms字段验证)',
+            'required': '密码不能为空!',
         },
     )
 
@@ -301,7 +301,7 @@ class ForgetPasswordForm(forms.Form):
         label='用户名或邮箱地址',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入您的用户名或者邮箱地址'}),
         error_messages={
-            'required': '密码不能为空!(这是forms字段验证)',
+            'required': '密码不能为空!',
         },
     )
     verification_code = forms.CharField(
@@ -360,9 +360,9 @@ class ChangeForgetPasswordForm(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '8-23位字母开头的大小写字母和数字组合'}),
         error_messages={
-            'required': '新密码不能为空!(这是forms字段验证)',
+            'required': '新密码不能为空!',
         },
-        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合(这是validators)')]
+        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')]
     )
     new_password_again = forms.CharField(
         label='重复一次新密码',
@@ -370,7 +370,7 @@ class ChangeForgetPasswordForm(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '请再次输入新密码'}),
         error_messages={
-            'required': '密码不能为空!(这是forms字段验证)',
+            'required': '密码不能为空!',
         },
     )
     def clean_new_password_again(self):

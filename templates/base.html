@@ -2,91 +2,131 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{% block title %}人间五十年,如梦亦如幻{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    <link href="{% static 'bootstrap-3.3.7-dist/css/bootstrap.min.css' %}" rel="stylesheet">
-    <link href="{% static 'css/bootstrap_lumen.min.css' %}" rel="stylesheet">
-    <script src="{% static 'js/jQuery v3.3.1.js' %}"></script>
-    <script src="{% static 'bootstrap-3.3.7-dist/js/bootstrap.min.js' %}"></script>
+    <link href="{% static 'css/bootswatch.min.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'font-awesome-4.7.0/css/font-awesome.min.css' %}">
     {% block head_extends %}{% endblock %}
 </head>
 <body>
-    <div class="container">
-        <div class="row">
-            <nav class="navbar navbar-default navbar-fixed-top">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                            <span class="sr-only">Toggle navigation</span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="{% url 'index' %}">XHE的个人博客</a>
-                    </div>
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
-                            <li class="{% block home_active %}{% endblock %}">
-                                <a href="{% url 'index' %}">首页 <span class="sr-only">(current)</span></a>
-                            </li>
-                            <li class="{% block blog_active %}{% endblock %}">
-                                <a href="{% url 'blog_list' %}">博客</a>
-                            </li>
-                            <li class="{% block demo1_active %}{% endblock %}">
-                                <a href="{% url 'demo1' %}">demo1</a>
-                            </li>
-                            <li class="">
-                                <a href="{% url 'xnhoutai:home' %}">虚拟后台</a>
-                            </li>
-                        </ul>
-                        <ul id="nav" class="nav navbar-nav navbar-right">
-                            {% block nav_extends %}
-                                {% if user.is_authenticated %}
-                                    <li class="">                                                     {# user.profile.avatar.url #}
-                                        <img id="title_avatar" class="img-circle img-responsive" src="{{ user.get_avatar_url }}" alt="avatar">
-                                    </li>
-                                    <li class="dropdown">
-                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                            欢迎您 {{ user.get_nickname_or_username }} <span class="caret"></span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li><a href="{% url 'user:user_info' %}">个人资料</a></li>
-                                            {% if user.is_staff %}
-                                                <li><a href="{% url 'admin:index' %}">后台管理</a></li>
-                                            {% endif %}
-                                            <li role="separator" class="divider"></li>
-                                            <li><a href="{% url 'user:logout' %}?from={{ request.get_full_path }}">退出</a></li>
-                                        </ul>
-                                    </li>
-                                {% else %}
-                                    <li class="{% block login_active %}{% endblock %}">
-                                        <a href="{% url 'user:login' %}?from={{ request.get_full_path }}">登录</a>
-                                    </li>
-                                    <li class="{% block register_active %}{% endblock %}">
-                                        <a href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a>
-                                    </li>
+    <section id="index-title">
+        <nav class="navbar navbar-expand-lg bg-dark text-light fixed-top border-bottom-0 p-2 rounded">
+            <a class="navbar-brand text-light" href="{% url 'blog_list' %}">
+                <i class="fa fa-paper-plane" aria-hidden="true"></i>&nbsp;Blog
+            </a>
+            <button class="navbar-toggler bg-light" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon bg-dark"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item {% block demo1_active %}{% endblock %}">
+                        <a class="nav-link text-dark" href="{% url 'demo1' %}">demo1</a>
+                    </li>
+                </ul>
+                <ul id="title_right" class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">                                                     {# user.profile.avatar.url #}
+                            <img id="title_avatar" class="img-fluid rounded-circle" src="{{ user.get_avatar_url }}" alt="avatar">
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                欢迎您 {{ user.get_nickname_or_username }}
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{% url 'user:user_info' %}">个人资料</a>
+                                {% if user.is_staff %}
+                                    <a class="dropdown-item" href="{% url 'admin:index' %}">后台管理</a>
                                 {% endif %}
-                            {% endblock %}
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="{% url 'user:logout' %}?from={{ request.get_full_path }}">退出</a>
+                            </div>
+                        </li>
+                        {% else %}
+                            <li class="nav-item {% block login_active %}{% endblock %}">
+                                <a class="nav-link text-light" href="{% url 'user:login' %}?from={{ request.get_full_path }}">登录</a>
+                            </li>
+                            <li class="nav-item {% block register_active %}{% endblock %}">
+                                <a class="nav-link text-light" href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a>
+                            </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
+    </section>
+    <section id="home">
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-9 content mt-5">
+                    {% block content %}
+
+                    {% endblock %}
+                </div>
+                <div class="col-md-3 month-hot mt-5">
+                    <div class="card">
+                        <div class="card-header bg-dark text-light">
+                            <i class="fa fa-industry" aria-hidden="true"></i>&nbsp;本月热门博客
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% for blog in month_hot_blogs %}
+                                <a class="list-group-item" href="{% url 'blog_detail' blog.pk %}">
+                                    {{ blog.title }}
+                                    <span class="badge badge-pill badge-primary float-right">阅读{{ blog.month_hot_sum }}</span>
+                                </a>
+                            {% empty %}
+                                <li class="list-group-item">暂无热门博客</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="card mt-5">
+                        <div class="card-header bg-dark text-light">
+                            <i class="fa fa-chain-broken" aria-hidden="true"></i>&nbsp;博客分类
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% for blog_type in blog_types %}
+                                <a class="list-group-item" href="{% url 'blogs_with_type' blog_type.pk %}">
+                                    {{ blog_type.type_name }}
+                                    <span class="badge badge-pill badge-primary float-right">{{ blog_type.blog_count }}</span>
+                                </a>
+                            {% empty %}
+                                <li class="list-group-item">暂无分类</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="card mt-5">
+                        <div class="card-header bg-dark text-light">
+                            <i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;日期归档
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% for blog_date,blog_count in blog_dates.items %}
+                                <a class="list-group-item" href="{% url 'blogs_with_date' blog_date.year blog_date.month %}">
+                                    {{ blog_date|date:'Y年m月' }}
+                                    <span class="badge badge-pill badge-primary float-right">{{ blog_count }}</span>
+                                </a>
+                            {% empty %}
+                                <li class="list-group-item">暂无归档</li>
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>
-            </nav>
+            </div>
         </div>
-    </div>
-    {% block content %}
+        </div>
+    </section>
 
-    {% endblock %}
     <!-- Modal -->
-    <div class="modal fade" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal fade" id="login_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm" role="document">
             <div class="modal-content">
                 <form id="login_modal_form" action="" method="POST">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myModalLabel">登录</h4>
+                        <h5 class="modal-title" id="exampleModalLabel">登录</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
                     <div class="modal-body">
                         {% csrf_token %}
@@ -98,12 +138,16 @@
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">登录</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
+    <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'bootstrap-4.0.0-dist/js/bootstrap.min.js' %}"></script>
     <script>
         $(function () {
             if ($('body').hasClass('modal-open')){
@@ -135,8 +179,8 @@
             return false;
         });
     </script>
-    {% block script_extends %}
 
+    {% block script_extends %}
     {% endblock %}
 </body>
 </html>

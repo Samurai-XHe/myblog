@@ -23,5 +23,5 @@ def get_comment_list(obj):
 def get_comment_form(obj):
     content_type = ContentType.objects.get_for_model(obj)
     comment_form = CommentForm(
-        initial={'content_type': content_type.model, 'object_id': obj.pk, 'reply_comment_id': 0})
+        initial={'content_type': content_type.model, 'object_id': obj.pk, 'reply_comment_id': 0,})
     return comment_form

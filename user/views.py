@@ -15,7 +15,7 @@ def login(request):
         if login_form.is_valid():
             user = login_form.cleaned_data['user']
             auth.login(request,user)
-            return redirect(request.GET.get('from',reverse('index')))
+            return redirect(request.GET.get('from',reverse('blog_list')))
     else:
         login_form = LoginForm()
 
@@ -39,10 +39,10 @@ def user_info(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect(request.GET.get('from',reverse('index')))
+    return redirect(request.GET.get('from',reverse('blog_list')))
 
 def register(request):
-    redirect_to = request.GET.get('from',reverse('index'))
+    redirect_to = request.GET.get('from',reverse('blog_list'))
     if request.method == 'POST':
         register_form = RegisterForm(request.POST,request=request)
         if register_form.is_valid():
@@ -106,7 +106,7 @@ def register_code(request):
     return JsonResponse(data)
 
 def change_nickname(request):
-    redirect_to = request.GET.get('from',reverse('index'))
+    redirect_to = request.GET.get('from',reverse('blog_list'))
     if request.method == 'POST':
         form = ChangeNickNameForm(request.POST,user=request.user)
         if form.is_valid():
@@ -126,7 +126,7 @@ def change_nickname(request):
     return render(request,'form.html',context)
 
 def bind_email(request):
-    redirect_to = request.GET.get('from', reverse('index'))
+    redirect_to = request.GET.get('from', reverse('blog_list'))
     if request.method == 'POST':
         form = BindEmailForm(request.POST,request=request)
         if form.is_valid():
@@ -187,7 +187,7 @@ def send_verification_code(request):
     return JsonResponse(data)
 
 def change_password(request):
-    redirect_to = request.GET.get('from',reverse('index'))
+    redirect_to = request.GET.get('from',reverse('blog_list'))
     if request.method == 'POST':
         form = ChangePassWordFormk(request.POST,user=request.user)
         if form.is_valid():
@@ -207,7 +207,7 @@ def change_password(request):
     return render(request,'user/change_password.html',context)
 
 def forget_password(request):
-    redirect_to = request.GET.get('from', reverse('index'))
+    redirect_to = request.GET.get('from', reverse('blog_list'))
     context = {}
     if request.method == 'POST':
         form = ForgetPasswordForm(request.POST,request=request)
@@ -306,5 +306,5 @@ def change_forget_password(request):
         context['submit_text'] = '提交'
         return render(request,'user/change_forget_password.html',context)
     else:
-        return redirect(reverse('index'))
+        return redirect(reverse('blog_list'))
 

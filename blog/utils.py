@@ -3,15 +3,6 @@ from django.utils import timezone
 from django.db.models import Sum
 from .models import Blog
 
-
-def get_today_hot_blog():
-    today = timezone.now().date()
-    blogs = Blog.objects\
-        .filter(read_detail__date=today)\
-        .order_by('-read_detail__one_day_read_count')
-
-    return blogs[:7]
-
 def get_week_hot_blog():
     today = timezone.now().date()
     date = today - datetime.timedelta(days=7)

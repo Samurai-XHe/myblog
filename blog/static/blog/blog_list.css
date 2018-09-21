@@ -1,23 +1,5 @@
-div.blog:not(:last-child) {
-    margin-bottom: 2em;
-    padding-bottom: 1em;
-    border-bottom: 1px solid #eee;
-}
-div.blog h3 {
-    margin-top: 0.5em;
-}
-div.paginator {
-    text-align: center;
-}
 
-ul.blog-type {
-    list-style-type: none;
+a,a:hover {
+    text-decoration:none;
 }
-div.blog-list {
-    padding-left: 0px;
-}
-div.type-and-date-list {
-    padding-right: 0px;
-}
-
 

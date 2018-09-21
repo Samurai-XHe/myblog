@@ -25,14 +25,14 @@
                             <span id="tip" class="text-danger">{{ form.non_field_errors }}</span>
                             <span id="success" class="text-success"></span>
                             <div class="clearfix"></div>
-                            <div class="pull-left">
+                            <div class="float-left">
                                 {% block other_buttons %}
                                 
                                 {% endblock %}
                             </div>
-                            <div class="pull-right">
+                            <div class="float-right mt-3">
                                 <input type="submit" value="{{ submit_text }}" class="btn btn-primary">
-                                <a class="btn btn-primary" onclick="window.location.href='{{ return_back }}'">返回</a>
+                                <a class="btn btn-primary text-light" onclick="window.location.href='{{ return_back }}'">返回</a>
                             </div>
                         </form>
                     </div>

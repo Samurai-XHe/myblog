@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'ckeditor_uploader',
     'user',
     'likes',
-    'xnhoutai',
     'imagekit',
 ]
 
@@ -76,6 +75,10 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'user.context_processors.login_modal_form',
+                'read_statistics.context_processors.week_hot_blogs',
+                'read_statistics.context_processors.month_hot_blogs',
+                'blog.context_processors.blog_types',
+                'blog.context_processors.blog_dates',
             ],
         },
     },
@@ -175,7 +178,7 @@ CKEDITOR_CONFIGS = {
             ['Link', 'Unlink'],
             ["Smiley", "SpecialChar", 'Blockquote'],
         ],
-        'width': 'auto',
+        'width': '100%',
         'height': '180',
         'tabSpaces': 4,
         'removePlugins': 'elementspath',

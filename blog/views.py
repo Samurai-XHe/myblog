@@ -29,25 +29,9 @@ def base_data(request,blogs):
     if page_range[-1] == '...':
         page_range.append(paginator.num_pages)
 
-    blog_types = BlogType.objects.annotate(blog_count=Count('blog'))
-    # 获取日期归档对应的博客数量
-    blog_dates = Blog.objects.dates('created_time','month',order="ASC")
-    blog_dates_dict = {}
-    for blog_date in blog_dates:
-        blog_count = Blog.objects.filter(created_time__year=blog_date.year,
-                                         created_time__month=blog_date.month).count()
-        blog_dates_dict[blog_date] = blog_count
-
-
     all_blogs = Blog.objects.all().count()
-
-    # 获取每篇博客的评论数
-
-
     context = {}
     context['all_blogs_count'] = all_blogs
-    context['blog_dates'] = blog_dates_dict
-    context['blog_types'] = blog_types
     context['page_range'] = page_range
     context['page_of_blogs'] = page_of_blogs
     return context

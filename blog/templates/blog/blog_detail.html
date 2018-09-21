@@ -11,149 +11,162 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container" style="margin-top: 10px">
+    <div class="container">
         <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-body">
+            <div class="col-md-12">
+                <div class="card">
                     <div class="blog">
-                        <div class="blog_title">
-                            <h3>{{ blog.title }}</h3>
-                            <p class="blog_title_bottom">
-                                <span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
-                                <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">
-                                    {{ blog.blog_type.type_name }}
-                                </a>
-                                &nbsp;&nbsp;&nbsp;作者：{{ blog.author.get_nickname_or_username }}
-                            </p>
-                        </div>
                         <div class="row">
-                            <div class="col-md-10 col-md-offset-1">
+                            <div class="col-md-12">
+                                <div class="blog_title border-bottom mt-5">
+                                    <h3 class="text-center font-weight-bold">{{ blog.title }}</h3>
+                                    <p class="blog_title_bottom text-center">
+                                        <i class="fa fa-chain-broken" aria-hidden="true"></i>
+                                        <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">
+                                            {{ blog.blog_type.type_name }}
+                                        </a>
+                                        &nbsp;&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i>&nbsp;{{ blog.author.get_nickname_or_username }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="content" class="row">
+                            <div class="col-md-8 offset-md-1 mt-2">
                                 <p class="blog_content">
                                     {{ blog.content|safe }}
                                 </p>
                             </div>
                         </div>
-                        <div class="blog_bottom">
-                            <div class="like" onclick="likeChange(this,'{% get_content_type blog %}',{{ blog.pk }})">
-                                <button class="like_button {% get_like_status blog %}sm">
-                                    <span class="glyphicon glyphicon-thumbs-up"></span>
-                                    <span class="liked_num">{% get_likes_count blog %}</span>
-                                    <span>喜欢</span>
-                                </button>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="blog_bottom border-top p-3">
+                                    <div class="like" onclick="likeChange(this,'{% get_content_type blog %}',{{ blog.pk }})">
+                                        <button class="like_button {% get_like_status blog %}sm">
+                                            <i class="fa fa-heart" aria-hidden="true"></i>
+                                            <span class="liked_num">{% get_likes_count blog %}</span>
+                                        </button>
+                                    </div>
+                                    <p class="float-right">
+                                        {{ blog.created_time }}&nbsp;&nbsp;&nbsp;
+                                        <i class="fa fa-eye" aria-hidden="true"></i>&nbsp;({{ blog.get_read_count }})&nbsp;&nbsp;
+                                        <i class="fa fa-comments" aria-hidden="true"></i>&nbsp;(<span id="comment_count">{% get_comment_count blog %}</span>)
+                                    </p>
+                                </div>
                             </div>
-                            <p class="pull-right">
-                                发布日期：{{ blog.created_time }}&nbsp;&nbsp;&nbsp;
-                                评论(<span id="comment_count">{% get_comment_count blog %}</span>)
-                                &nbsp;&nbsp;阅读({{ blog.get_read_count }})
-                            </p>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="blog_more">
-            <nav aria-label="...">
-                <ul class="pager">
+            <div class="col-md-12 mt-3 mb-3">
+                <div class="pager float-right">
                     {% if next_page %}
-                        <li class="pull-right" style="margin-left: 20px;">
-                            <a href="{% url 'blog_detail' next_page.pk %}">下一篇： {{ next_page.title }}
-                                <span aria-hidden="true"></span>
-                            </a>
-                        </li>
+                        <a class="btn btn-primary" href="{% url 'blog_detail' next_page.pk %}">下一篇： {{ next_page.title }}
+                            <span aria-hidden="true"></span>
+                        </a>
                     {% else %}
-                        <li class="pull-right" style="margin-left: 20px;">
-                            <a href="javascript:void(0)">下一篇：没有了
-                                <span aria-hidden="true"></span>
-                            </a>
-                        </li>
+                        <a class="btn btn-primary" href="javascript:void(0)">下一篇：没有了
+                            <span aria-hidden="true"></span>
+                        </a>
                     {% endif %}
                     {% if previous_page %}
-                      <li class="pull-right">
-                          <a href="{% url 'blog_detail' previous_page.pk %}">
-                              <span aria-hidden="true">上一篇：</span> {{ previous_page.title }}
-                          </a>
-                      </li>
+                        <a class="btn btn-primary" href="{% url 'blog_detail' previous_page.pk %}">
+                            <span aria-hidden="true">上一篇：</span> {{ previous_page.title }}
+                        </a>
                     {% else %}
-                        <li class="pull-right">
-                          <a href="javascript:void(0)">
-                              <span aria-hidden="true"> 上一篇：没有了</span>
-                          </a>
-                      </li>
+                        <a class="btn btn-primary" href="javascript:void(0)">
+                            <span aria-hidden="true"> 上一篇：没有了</span>
+                        </a>
                     {% endif %}
-              </ul>
-            </nav>
+                </div>
+            </div>
         </div>
+
         <div class="row">
-            <div class="panel panel-default">
-                <div class="panel-heading">评论区</div>
-                <div class="panel-body">
-                    {% if user.is_authenticated %}
-                        <label>{{ user.get_nickname_or_username }}&nbsp;&nbsp;欢迎评论!</label>
-                        <form id="comment_form" action="{% url 'update_comment' %}" method="POST">
-                            <div id="reply_comment_container" style="display: none;">
-                                <p>回复：</p>
-                                <div id="reply_comment"></div>
-                            </div>
-                            {% csrf_token %}
-                            {% get_comment_form blog as comment_form %}
-                            {% for foo in comment_form %}
-                                {{ foo }}
-                            {% endfor %}
-                            <span id="comment_error" class="text-danger pull-left"></span>
-                            <input class="btn btn-primary pull-right" type="submit" value="提交评论">
-                        </form>
-                    {% else %}
-                        <div class="alert alert-danger" role="alert">
-                            <a href="" data-toggle="modal" data-target="#login_modal">登录</a>
-                            后才能评论哦！没有账号？
-                            <a href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a>
-                        </div>
-                    {% endif %}
-                    <ul id="comment_list" class="list-group" style="margin-top: 50px;">
-                        {% get_comment_list blog as comment_list %}
-                        {% for comment in comment_list %}
-                            <li class="list-group-item">
-                                <div class="comment">
-                                    <div class="like pull-right" onclick="likeChange(this,'{% get_content_type comment %}',{{ comment.pk }})">
-                                        <button class="like_button {% get_like_status comment %}xs">
-                                            <span class="glyphicon glyphicon-thumbs-up"></span>
-                                            <span class="liked_num">{% get_likes_count comment %}</span>
-                                            <span>喜欢</span>
-                                        </button>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header"><i class="fa fa-comments" aria-hidden="true"></i>&nbsp;评论区</div>
+                    <div class="card-body">
+                        <div class="container">
+                            {% if user.is_authenticated %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="reply_comment_container" class="alert alert-info" style="display: none;">
+                                            <div class="">
+                                                 回复：<span id="reply_comment"></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <span>{{ comment.user.get_nickname_or_username }} 评论于 {{ comment.comment_time|date:'Y-m-d H:i' }}</span>
-                                    <span><a href="javascript:reply({{ comment.pk }});">回复</a></span>
-                                    <div id="comment_{{ comment.pk }}">
-                                        {{ comment.text|safe }}
-                                    </div>
-                                    <ul id="root_{{ comment.pk }}" class="list-group">
-                                        {% for reply in comment.root_comment.all %}
-                                            <li  class="list-group-item">
-                                                <div class="like pull-right" onclick="likeChange(this,'{% get_content_type reply %}',{{ reply.pk }})">
-                                                    <button class="like_button {% get_like_status reply %}xs">
-                                                        <span class="glyphicon glyphicon-thumbs-up"></span>
-                                                        <span class="liked_num">{% get_likes_count reply %}</span>
-                                                        <span>喜欢</span>
-                                                    </button>
-                                                </div>
-                                                <span>{{ reply.user.get_nickname_or_username }} 于 {{ reply.comment_time|date:'Y-m-d H:i' }}</span>
-                                                <span>回复：</span>
-                                                <span>{{ reply.reply_to.get_nickname_or_username }}</span>
-                                                <span>
-                                                    <a href="javascript:reply({{ reply.pk }});">回复</a>
-                                                </span>
-                                                <div id="comment_{{ reply.pk }}">
-                                                    {{ reply.text|safe }}
-                                                </div>
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
                                 </div>
-                            </li>
-                        {% empty %}
-                            <li id="no_comment" class="list-group-item">暂无评论</li>
-                        {% endfor %}
-                    </ul>
+                                <div class="row">
+                                    <form id="comment_form" action="{% url 'update_comment' %}" method="POST">
+                                        <div class="col-md-12">
+                                            {% csrf_token %}
+                                            {% get_comment_form blog as comment_form %}
+                                            {{ comment_form.content_type }}
+                                            {{ comment_form.object_id }}
+                                            {{ comment_form.reply_comment_id }}
+                                            {{ comment_form.text }}
+                                        </div>
+                                        <div class="mt-3">
+                                            <span id="comment_error" class="text-danger float-left"></span>
+                                            <input class="btn btn-primary float-right" type="submit" value="提交评论">
+                                        </div>
+                                    </form>
+                                </div>
+                            {% else %}
+                                <div class="alert alert-danger" role="alert">
+                                    <a href="" data-toggle="modal" data-target="#login_modal">登录</a>
+                                    后才能评论哦！没有账号？
+                                    <a href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a>
+                                </div>
+                            {% endif %}
+                            <ul id="comment_list" class="card mt-3">
+                                {% get_comment_list blog as comment_list %}
+                                {% for comment in comment_list %}
+                                    <li class="list-group-item">
+                                        <div class="comment">
+                                            <div class="like float-right" onclick="likeChange(this,'{% get_content_type comment %}',{{ comment.pk }})">
+                                                <button class="like_button {% get_like_status comment %}xs">
+                                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                                    <span class="liked_num">{% get_likes_count comment %}</span>
+                                                    <span>喜欢</span>
+                                                </button>
+                                            </div>
+                                            <span>{{ comment.user.get_nickname_or_username }} 评论于 {{ comment.comment_time|date:'Y-m-d H:i' }}</span>
+                                            <span><a href="javascript:reply({{ comment.pk }});">回复</a></span>
+                                            <div id="comment_{{ comment.pk }}">
+                                                {{ comment.text|safe }}
+                                            </div>
+                                            <ul id="root_{{ comment.pk }}" class="list-group">
+                                                {% for reply in comment.root_comment.all %}
+                                                    <li  class="list-group-item">
+                                                        <div class="like float-right" onclick="likeChange(this,'{% get_content_type reply %}',{{ reply.pk }})">
+                                                            <button class="like_button {% get_like_status reply %}xs">
+                                                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                                                                <span class="liked_num">{% get_likes_count reply %}</span>
+                                                                <span>喜欢</span>
+                                                            </button>
+                                                        </div>
+                                                        <span>{{ reply.user.get_nickname_or_username }} 于 {{ reply.comment_time|date:'Y-m-d H:i' }}</span>
+                                                        <span>回复：</span>
+                                                        <span>{{ reply.reply_to.get_nickname_or_username }}</span>
+                                                        <span>
+                                                            <a href="javascript:reply({{ reply.pk }});">回复</a>
+                                                        </span>
+                                                        <div id="comment_{{ reply.pk }}">
+                                                            {{ reply.text|safe }}
+                                                        </div>
+                                                    </li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </li>
+                                {% empty %}
+                                    <li id="no_comment" class="list-group-item">暂无评论</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -165,8 +178,8 @@
         function reply(reply_comment_id){
             {% if user.is_authenticated %}
                 $('#reply_comment_id').val(reply_comment_id);
-                var html = $('#comment_'+reply_comment_id).html();
-                $('#reply_comment').html(html);
+                var html = $('#comment_'+reply_comment_id).text();
+                $('#reply_comment').text(html);
                 $('#reply_comment_container').show();
                 $('html').animate({scrollTop:$('#comment_form').offset().top - 60},300,function () {
                     CKEDITOR.instances['id_text'].focus();
@@ -239,7 +252,7 @@
                             //插入评论
                             var comment_html = '<li class="list-group-item">'+
                             '<div id="root_'+data['pk']+'" class="comment">'+
-                                '<div class="like pull-right" onclick="likeChange'+
+                                '<div class="like float-right" onclick="likeChange'+
                                     '(this,'+'\''+data['content_type']+'\''+','+data['pk']+')">'+
                                     '<button class="like_button btn btn-default btn-xs">'+
                                         '<span class="glyphicon glyphicon-thumbs-up"></span>'+
@@ -257,7 +270,7 @@
                         } else{
                             //插入回复
                             var reply_html = '<li  class="list-group-item">'+
-                                '<div class="like pull-right" onclick="likeChange(this,'+'\''+data['content_type']+'\''+','+data['pk']+')">'+
+                                '<div class="like float-right" onclick="likeChange(this,'+'\''+data['content_type']+'\''+','+data['pk']+')">'+
                                     '<button class="like_button btn btn-default btn-xs">'+
                                         '<span class="glyphicon glyphicon-thumbs-up"></span>'+
                                         '<span class="liked_num">0</span>'+

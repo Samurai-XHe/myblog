@@ -3,5 +3,5 @@
     这里是{{ blog_type.type_name }}分类列表
 {% endblock %}
 {% block blogs_title %}
-    {{ blog_type.type_name }}列表 共{{ blog_type.blog_set.count }}篇博客
+    <i class="fa fa-chain-broken" aria-hidden="true"></i>&nbsp;{{ blog_type.type_name }}&nbsp;&nbsp;{{ blog_type.blog_set.count }}篇
 {% endblock %}
