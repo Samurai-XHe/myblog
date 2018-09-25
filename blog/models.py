@@ -4,6 +4,8 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.urls import reverse
 from ckeditor_uploader.fields import RichTextUploadingField
 from read_statistics.models import GetReadCount,OneDayReadCount
+from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 class BlogType(models.Model):
     type_name = models.CharField(max_length=50)
@@ -19,6 +21,10 @@ class Blog(models.Model,GetReadCount):
     author = models.ForeignKey(User,on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True)
     last_updated_time = models.DateTimeField(auto_now=True)
+    cover = ProcessedImageField(verbose_name='封面',
+                                 upload_to='cover_imgs/%y/%m/%d',
+                                 processors=[ResizeToFill(150, 200)],
+                                 default='cover_imgs/qq1.gif')
 
     def __str__(self):
         return '<Blog: %s>' % self.title
@@ -28,6 +34,9 @@ class Blog(models.Model,GetReadCount):
 
     def get_email(self):
         return self.author.email
+
+    def get_cover(self):
+        return self.cover.url
 
     class Meta:
         ordering = ['-created_time']

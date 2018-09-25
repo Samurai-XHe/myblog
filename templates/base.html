@@ -65,13 +65,13 @@
                 </div>
                 <div class="col-md-3 month-hot mt-5">
                     <div class="card">
-                        <div class="card-header bg-dark text-light">
+                        <div class="card-header bg-info text-light">
                             <i class="fa fa-industry" aria-hidden="true"></i>&nbsp;本月热门博客
                         </div>
                         <ul class="list-group list-group-flush">
                             {% for blog in month_hot_blogs %}
                                 <a class="list-group-item" href="{% url 'blog_detail' blog.pk %}">
-                                    {{ blog.title }}
+                                    {{ blog.title|truncatechars:13 }}
                                     <span class="badge badge-pill badge-primary float-right">阅读{{ blog.month_hot_sum }}</span>
                                 </a>
                             {% empty %}
@@ -81,7 +81,7 @@
                     </div>
 
                     <div class="card mt-5">
-                        <div class="card-header bg-dark text-light">
+                        <div class="card-header bg-danger text-light">
                             <i class="fa fa-chain-broken" aria-hidden="true"></i>&nbsp;博客分类
                         </div>
                         <ul class="list-group list-group-flush">
@@ -97,7 +97,7 @@
                     </div>
 
                     <div class="card mt-5">
-                        <div class="card-header bg-dark text-light">
+                        <div class="card-header bg-warning text-light">
                             <i class="fa fa-calendar-o" aria-hidden="true"></i>&nbsp;日期归档
                         </div>
                         <ul class="list-group list-group-flush">

@@ -20,12 +20,12 @@
                             <div class="col-md-12">
                                 <div class="blog_title border-bottom mt-5">
                                     <h3 class="text-center font-weight-bold">{{ blog.title }}</h3>
-                                    <p class="blog_title_bottom text-center">
+                                    <p class="blog_title_bottom text-center font-weight-light">
+                                        <i class="fa fa-user" aria-hidden="true"></i>&nbsp;{{ blog.author.get_nickname_or_username }}&nbsp;&nbsp;&nbsp;
                                         <i class="fa fa-chain-broken" aria-hidden="true"></i>
                                         <a href="{% url 'blogs_with_type' blog.blog_type.pk %}">
                                             {{ blog.blog_type.type_name }}
                                         </a>
-                                        &nbsp;&nbsp;&nbsp;<i class="fa fa-user" aria-hidden="true"></i>&nbsp;{{ blog.author.get_nickname_or_username }}
                                     </p>
                                 </div>
                             </div>
@@ -40,7 +40,7 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="blog_bottom border-top p-3">
-                                    <div class="like" onclick="likeChange(this,'{% get_content_type blog %}',{{ blog.pk }})">
+                                    <div class="like float-left" onclick="likeChange(this,'{% get_content_type blog %}',{{ blog.pk }})">
                                         <button class="like_button {% get_like_status blog %}sm">
                                             <i class="fa fa-heart" aria-hidden="true"></i>
                                             <span class="liked_num">{% get_likes_count blog %}</span>
@@ -98,7 +98,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <form id="comment_form" action="{% url 'update_comment' %}" method="POST">
+                                    <form id="comment_form" action="{% url 'update_comment' %}" method="POST" autocomplete="off">
                                         <div class="col-md-12">
                                             {% csrf_token %}
                                             {% get_comment_form blog as comment_form %}
@@ -109,6 +109,7 @@
                                         </div>
                                         <div class="mt-3">
                                             <span id="comment_error" class="text-danger float-left"></span>
+                                            <span id="comment_success" class="text-success float-left"></span>
                                             <input class="btn btn-primary float-right" type="submit" value="提交评论">
                                         </div>
                                     </form>
@@ -120,51 +121,47 @@
                                     <a href="{% url 'user:register' %}?from={{ request.get_full_path }}">注册</a>
                                 </div>
                             {% endif %}
-                            <ul id="comment_list" class="card mt-3">
+                            <div id="comment_list" class="mt-1">
                                 {% get_comment_list blog as comment_list %}
                                 {% for comment in comment_list %}
-                                    <li class="list-group-item">
-                                        <div class="comment">
+                                        <div class="comment rounded mt-3 p-2 font-weight-light">
                                             <div class="like float-right" onclick="likeChange(this,'{% get_content_type comment %}',{{ comment.pk }})">
-                                                <button class="like_button {% get_like_status comment %}xs">
-                                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                                <button class="like_button {% get_like_status comment %}sm">
+                                                    <i class="fa fa-heart" aria-hidden="true"></i>
                                                     <span class="liked_num">{% get_likes_count comment %}</span>
-                                                    <span>喜欢</span>
                                                 </button>
                                             </div>
                                             <span>{{ comment.user.get_nickname_or_username }} 评论于 {{ comment.comment_time|date:'Y-m-d H:i' }}</span>
-                                            <span><a href="javascript:reply({{ comment.pk }});">回复</a></span>
+                                            <span><a class="text-info" href="javascript:reply({{ comment.pk }});">回复</a></span>
                                             <div id="comment_{{ comment.pk }}">
                                                 {{ comment.text|safe }}
                                             </div>
-                                            <ul id="root_{{ comment.pk }}" class="list-group">
+                                            <div id="root_{{ comment.pk }}">
                                                 {% for reply in comment.root_comment.all %}
-                                                    <li  class="list-group-item">
+                                                    <div  class="huifu rounded ml-5 mb-1 p-2">
                                                         <div class="like float-right" onclick="likeChange(this,'{% get_content_type reply %}',{{ reply.pk }})">
-                                                            <button class="like_button {% get_like_status reply %}xs">
-                                                                <span class="glyphicon glyphicon-thumbs-up"></span>
+                                                            <button class="like_button {% get_like_status reply %}sm">
+                                                                <i class="fa fa-heart" aria-hidden="true"></i>
                                                                 <span class="liked_num">{% get_likes_count reply %}</span>
-                                                                <span>喜欢</span>
                                                             </button>
                                                         </div>
                                                         <span>{{ reply.user.get_nickname_or_username }} 于 {{ reply.comment_time|date:'Y-m-d H:i' }}</span>
                                                         <span>回复：</span>
                                                         <span>{{ reply.reply_to.get_nickname_or_username }}</span>
                                                         <span>
-                                                            <a href="javascript:reply({{ reply.pk }});">回复</a>
+                                                            <a class="text-info" href="javascript:reply({{ reply.pk }});">回复</a>
                                                         </span>
                                                         <div id="comment_{{ reply.pk }}">
                                                             {{ reply.text|safe }}
                                                         </div>
-                                                    </li>
+                                                    </div>
                                                 {% endfor %}
-                                            </ul>
+                                            </div>
                                         </div>
-                                    </li>
                                 {% empty %}
                                     <li id="no_comment" class="list-group-item">暂无评论</li>
                                 {% endfor %}
-                            </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -181,7 +178,7 @@
                 var html = $('#comment_'+reply_comment_id).text();
                 $('#reply_comment').text(html);
                 $('#reply_comment_container').show();
-                $('html').animate({scrollTop:$('#comment_form').offset().top - 60},300,function () {
+                $('html').animate({scrollTop:$('#comment_form').offset().top - 130},300,function () {
                     CKEDITOR.instances['id_text'].focus();
                 })
             {% else %}
@@ -230,13 +227,13 @@
         $('#comment_form').submit(function () {
             // 清空提示信息
             $('#comment_error').text('');
+            $('#comment_success').text('');
             if (CKEDITOR.instances['id_text'].document.getBody().getText().trim() == ''){
                 $('#comment_error').text('评论内容不能为空。(这是JS判断)');
                 return false;
             }
             // 更新数据到textarea
             CKEDITOR.instances['id_text'].updateElement();
-
             //使用AJAX提交
             $.ajax({
                 url:'{% url 'update_comment' %}',
@@ -244,57 +241,12 @@
                 data:$(this).serialize(),
                 cache:false,
                 success:function (data) {
-                    console.log(data);
-                    var comment_count = Number($('#comment_count').text())+1
-                    $('#comment_count').text(comment_count)
                     if (data['status'] == 'SUCCESS') {
-                        if($('#reply_comment_id').val()=='0'){
-                            //插入评论
-                            var comment_html = '<li class="list-group-item">'+
-                            '<div id="root_'+data['pk']+'" class="comment">'+
-                                '<div class="like float-right" onclick="likeChange'+
-                                    '(this,'+'\''+data['content_type']+'\''+','+data['pk']+')">'+
-                                    '<button class="like_button btn btn-default btn-xs">'+
-                                        '<span class="glyphicon glyphicon-thumbs-up"></span>'+
-                                        '<span class="liked_num">0</span>'+
-                                        '<span>喜欢</span>'+
-                                    '</button>'+
-                                '</div>'+
-                                '<span>'+ data['username']+' 评论于 '+ data['comment_time'] +'</span>'+
-                                '<span><a href="javascript:reply('+ data['pk'] +');">回复</a></span>'+
-                                '<div id="comment_'+ data['pk'] +'">'+
-                                    ''+ data['text'] +''+
-                                '</div>'+
-                            '</div></li>';
-                            $('#comment_list').prepend(comment_html);
-                        } else{
-                            //插入回复
-                            var reply_html = '<li  class="list-group-item">'+
-                                '<div class="like float-right" onclick="likeChange(this,'+'\''+data['content_type']+'\''+','+data['pk']+')">'+
-                                    '<button class="like_button btn btn-default btn-xs">'+
-                                        '<span class="glyphicon glyphicon-thumbs-up"></span>'+
-                                        '<span class="liked_num">0</span>'+
-                                        '<span>喜欢</span>'+
-                                    '</button>'+
-                                '</div>'+
-                                '<span>'+ data['username'] +' 于 '+ data['comment_time'] +'</span>'+
-                                '<span>回复：</span>'+
-                                '<span>'+ data['reply_to'] +'</span>'+
-                                '<span>'+
-                                    '<a href="javascript:reply('+ data['pk'] +');">回复</a>'+
-                                '</span>'+
-                                '<div id="comment_'+ data['pk'] +'">'+
-                                    ''+ data['text'] +''+
-                                '</div>'+
-                            '</li>'
-                            $('#root_'+data['root_pk']).append(reply_html)
-                        }
-                        CKEDITOR.instances['id_text'].setData('');  // 评论成功后清空编辑框的内容
                         $('#reply_comment_container').hide();  // 隐藏回复提示
                         $('#reply_comment_id').val('0');  // 初始化评论id
-                        $('#no_comment').remove();  // 因为是ajax提交，所以一篇博客如果没有评论，“暂无评论”不会消失，要用js手动移除
                         // 提示评论成功
-                        $('#comment_error').text(data['message'])
+                        $('#comment_success').text(data['message'])
+                        window.location.reload()
                     }
                     else{
                         //显示错误信息
