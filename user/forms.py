@@ -4,37 +4,37 @@ from django.core.validators import RegexValidator
 from django.contrib import auth
 from django.contrib.auth.models import User
 
+
 class LoginForm(forms.Form):
     username = forms.CharField(
         label='用户名',
         min_length=3,
         max_length=10,
-        widget=forms.TextInput(attrs={'class':'form-control','placeholder':'请输入用户名'}),
+        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入用户名'}),
         error_messages={
             'required': '用户名不能为空!',
         },
-        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$','必须是字母开头的字母数字组合')]
+        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$', '必须是字母开头的字母数字组合')]
     )
     password = forms.CharField(
         label='密码',
         min_length=8,
         max_length=20,
-        widget=forms.PasswordInput(attrs={'class':'form-control','placeholder':'请输入密码'}),
-        error_messages = {
-            'required': '密码不能为空!',
-        },
-        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')]
-    )
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '请输入密码'}),
+        error_messages={
+            'required': '密码不能为空!', },
+        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')])
 
     def clean(self):
-        username = self.cleaned_data.get('username',' ')
-        password = self.cleaned_data.get('password',' ')
-        user = auth.authenticate(username=username,password=password)
+        username = self.cleaned_data.get('username', ' ')
+        password = self.cleaned_data.get('password', ' ')
+        user = auth.authenticate(username=username, password=password)
         if user is None:
             raise forms.ValidationError('用户名或密码错误')
         else:
             self.cleaned_data['user'] = user
         return self.cleaned_data
+
 
 class RegisterForm(forms.Form):
     username = forms.CharField(
@@ -44,16 +44,12 @@ class RegisterForm(forms.Form):
         widget=forms.TextInput(
             attrs={
                 'class':'form-control',
-                'placeholder':'3-10位字母开头的字母数字组合',
-            }
-        ),
+                'placeholder':'3-10位字母开头的字母数字组合', }),
         error_messages={
             'required':'用户名不能为空',
             'max_length':'不能超过10位',
-            'min_length':'不能少于3位',
-        },
-        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$', '必须是字母开头的字母数字组合')]
-    )
+            'min_length':'不能少于3位', },
+        validators=[RegexValidator('^[a-zA-Z][a-zA-Z0-9_]{2,9}$', '必须是字母开头的字母数字组合')])
 
     password = forms.CharField(
         label='密码',
@@ -62,16 +58,12 @@ class RegisterForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': '8-23位字母开头的大小写字母和数字组合',
-            }
-        ),
+                'placeholder': '8-23位字母开头的大小写字母和数字组合', }),
         error_messages={
             'required': '密码不能为空',
             'max_length': '不能超过23位',
-            'min_length': '不能少于8位',
-        },
-        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')]
-    )
+            'min_length': '不能少于8位',},
+        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')])
     password_again = forms.CharField(
         label='再输一遍密码',
         min_length=8,
@@ -79,39 +71,32 @@ class RegisterForm(forms.Form):
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': '请再输一遍密码',
-            }
-        ),
+                'placeholder': '请再输一遍密码', }),
         error_messages={
             'required': '密码不能为空',
             'max_length': '不能超过23位',
-            'min_length': '不能少于8位',
-        }
-    )
+            'min_length': '不能少于8位', })
     email = forms.EmailField(
         label='邮箱',
         widget=forms.EmailInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': '请输入可用的邮箱地址',
-            }
-        ),
+                'placeholder': '请输入可用的邮箱地址', }),
         error_messages={
-            'required': '邮箱不能为空',
-        }
-    )
+            'required': '邮箱不能为空', })
     verification_code = forms.CharField(
         label='验证码',
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '点击“发送验证码”，输入您邮箱收到的四位验证码'}),
-    )
-    def __init__(self,*args,**kwargs):
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': '点击“发送验证码”，输入您邮箱收到的四位验证码'}),)
+
+    def __init__(self, *args, **kwargs):
         if 'request' in kwargs:
             self.request = kwargs.pop('request')
-        super(RegisterForm, self).__init__(*args,**kwargs)
+        super(RegisterForm, self).__init__(*args, **kwargs)
 
     def clean_username(self):
-        username = self.cleaned_data.get('username','')
+        username = self.cleaned_data.get('username', '')
         if username == '':
             raise forms.ValidationError('用户名不能为空')
         if User.objects.filter(username=username).exists():
@@ -127,8 +112,8 @@ class RegisterForm(forms.Form):
         return email
 
     def clean_password_again(self):
-        password = self.cleaned_data.get('password','')
-        password_again = self.cleaned_data.get('password_again','')
+        password = self.cleaned_data.get('password', '')
+        password_again = self.cleaned_data.get('password_again', '')
         if password == '':
             raise forms.ValidationError('密码不能为空')
         if password != password_again:
@@ -137,10 +122,10 @@ class RegisterForm(forms.Form):
 
     def clean_verification_code(self):
         # 判断验证码
-        email = self.cleaned_data.get('email','')
-        print(email,'++++++++++++++++++++email')
+        email = self.cleaned_data.get('email', '')
+        print(email, '++++++++++++++++++++email')
         code = self.request.session.get(email, '')
-        print(code,'++++++++++++++++++code')
+        print(code, '++++++++++++++++++code')
         verification_code = self.cleaned_data.get('verification_code').strip()
         print(verification_code,'++++++++++++++++++++++ver')
         if verification_code == '':
@@ -155,18 +140,19 @@ class RegisterForm(forms.Form):
             raise forms.ValidationError('填写验证码超时，请重新获取验证码')
         return verification_code
 
+
 class ChangeNickNameForm(forms.Form):
     nickname_new = forms.CharField(
         label= '新昵称',
         max_length= 10,
-        widget= forms.TextInput(attrs= {'class':'form-control','placeholder':'请输入新的昵称'}),
+        widget= forms.TextInput(attrs= {'class': 'form-control', 'placeholder': '请输入新的昵称'}),
         error_messages= {'required': '新昵称不能为空'},
     )
 
-    def __init__(self,*args,**kwargs):
+    def __init__(self, *args, **kwargs):
         if 'user' in kwargs:
             self.user = kwargs.pop('user')
-        super(ChangeNickNameForm, self).__init__(*args,**kwargs)
+        super(ChangeNickNameForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         # 判断用户是否登录
@@ -177,30 +163,31 @@ class ChangeNickNameForm(forms.Form):
         return self.cleaned_data
 
     def clean_nickname_new(self):
-        nickname_new = self.cleaned_data.get('nickname_new','').strip()
+        nickname_new = self.cleaned_data.get('nickname_new', '').strip()
         if nickname_new == '':
             raise forms.ValidationError('新的昵称不能为空')
         return nickname_new
 
+
 class BindEmailForm(forms.Form):
     email = forms.EmailField(
         label='邮箱地址',
-        widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'请输入邮箱地址'}),
-    )
+        widget=forms.EmailInput(attrs={'class':'form-control','placeholder':'请输入邮箱地址'}),)
     verification_code = forms.CharField(
         label='验证码',
         required=False,
-        widget=forms.TextInput(attrs={'class':'form-control','placeholder':'点击“发送验证码”，输入您邮箱收到的四位验证码'}),
-    )
-    def __init__(self,*args,**kwargs):
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': '点击“发送验证码”，输入您邮箱收到的四位验证码'}),)
+
+    def __init__(self, *args, **kwargs):
         if 'request' in kwargs:
             self.request = kwargs.pop('request')
-        super(BindEmailForm, self).__init__(*args,**kwargs)
+        super(BindEmailForm, self).__init__(*args, **kwargs)
 
     def clean(self):
         # 判断用户是否登录
         if self.request.user.is_authenticated:
-           self.cleaned_data['user'] = self.request.user
+            self.cleaned_data['user'] = self.request.user
         else:
             raise forms.ValidationError('您没有登录，请先登录')
         # 判断用户是否已绑定邮箱
@@ -209,10 +196,10 @@ class BindEmailForm(forms.Form):
         return self.cleaned_data
 
     def clean_email(self):
-        email = self.cleaned_data.get('email','')
+        email = self.cleaned_data.get('email', '')
         if email == '':
             raise forms.ValidationError('邮箱地址不能为空')
-        true_email = self.request.session.get('email','')
+        true_email = self.request.session.get('email', '')
         if true_email != email:
             raise forms.ValidationError('您的邮箱地址已改变，请重新获取验证码')
         else:
@@ -221,12 +208,12 @@ class BindEmailForm(forms.Form):
 
     def clean_verification_code(self):
         # 判断验证码
-        email = self.cleaned_data.get('email','')
-        print(email,'++++++++++++++++++++email')
+        email = self.cleaned_data.get('email', '')
+        print(email, '++++++++++++++++++++email')
         code = self.request.session.get(email, '')
-        print(code,'++++++++++++++++++code')
+        print(code, '++++++++++++++++++code')
         verification_code = self.cleaned_data.get('verification_code').strip()
-        print(verification_code,'++++++++++++++++++++++ver')
+        print(verification_code, '++++++++++++++++++++++ver')
         if verification_code == '':
             raise forms.ValidationError('验证码不能为空')
         if code != verification_code:
@@ -239,6 +226,7 @@ class BindEmailForm(forms.Form):
             raise forms.ValidationError('填写验证码超时，请重新获取验证码')
         return verification_code
 
+
 class ChangePassWordFormk(forms.Form):
     old_password = forms.CharField(
         label='旧密码',
@@ -246,17 +234,14 @@ class ChangePassWordFormk(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '请输入当前使用的密码'}),
         error_messages={
-            'required': '密码不能为空!',
-        },
-    )
+            'required': '密码不能为空!', },)
     new_password = forms.CharField(
         label='新密码',
         min_length=8,
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '8-23位字母开头的大小写字母和数字组合'}),
         error_messages={
-            'required': '新密码不能为空!',
-        },
+            'required': '新密码不能为空!', },
         validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')]
     )
     new_password_again = forms.CharField(
@@ -265,14 +250,12 @@ class ChangePassWordFormk(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '请再次输入新密码'}),
         error_messages={
-            'required': '密码不能为空!',
-        },
-    )
+            'required': '密码不能为空!', },)
 
-    def __init__(self,*args,**kwargs):
+    def __init__(self, *args, **kwargs):
         if 'user' in kwargs:
             self.user = kwargs.pop('user')
-        super(ChangePassWordFormk, self).__init__(*args,**kwargs)
+        super(ChangePassWordFormk, self).__init__(*args, **kwargs)
 
     def clean(self):
         if not self.user.is_authenticated:
@@ -281,46 +264,44 @@ class ChangePassWordFormk(forms.Form):
             self.cleaned_data['user'] = self.user
         return self.cleaned_data
 
-
     def clean_new_password_again(self):
-        new_password = self.cleaned_data.get('new_password','')
-        new_password_again = self.cleaned_data.get('new_password_again','')
+        new_password = self.cleaned_data.get('new_password', '')
+        new_password_again = self.cleaned_data.get('new_password_again', '')
         if new_password != new_password_again:
             raise forms.ValidationError('两次输入的密码不一致,请重新输入')
         return new_password_again
 
-
     def clean_old_password(self):
-        old_password = self.cleaned_data.get('old_password','')
+        old_password = self.cleaned_data.get('old_password', '')
         if not self.user.check_password(old_password):
             raise forms.ValidationError('当前密码不正确')
         return old_password
+
 
 class ForgetPasswordForm(forms.Form):
     username_or_email = forms.CharField(
         label='用户名或邮箱地址',
         widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '请输入您的用户名或者邮箱地址'}),
         error_messages={
-            'required': '密码不能为空!',
-        },
-    )
+            'required': '密码不能为空!', },)
     verification_code = forms.CharField(
         label='验证码',
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': '点击“发送验证码”，输入您邮箱收到的四位验证码'}),
-    )
-    def __init__(self,*args,**kwargs):
+        widget=forms.TextInput(
+            attrs={'class': 'form-control', 'placeholder': '点击“发送验证码”，输入您邮箱收到的四位验证码'}),)
+
+    def __init__(self, *args, **kwargs):
         if 'request' in kwargs:
             self.request = kwargs.pop('request')
-        super(ForgetPasswordForm, self).__init__(*args,**kwargs)
+        super(ForgetPasswordForm, self).__init__(*args, **kwargs)
 
     def clean(self):
-        username_or_email = self.cleaned_data.get('username_or_email','')
-        print(username_or_email,'+++++++user_or_emial')
-        true_username_or_email = self.request.session.get('username_or_email','')
-        print(true_username_or_email,'++++++++++trueuser')
+        username_or_email = self.cleaned_data.get('username_or_email', '')
+        print(username_or_email, '+++++++user_or_emial')
+        true_username_or_email = self.request.session.get('username_or_email', '')
+        print(true_username_or_email, '++++++++++trueuser')
         if username_or_email != true_username_or_email:
-            email = self.request.session.get('email','')
+            email = self.request.session.get('email', '')
             if email != '':
                 del self.request.session[email]
                 del self.request.session['email']
@@ -337,9 +318,9 @@ class ForgetPasswordForm(forms.Form):
 
     def clean_verification_code(self):
         # 判断验证码
-        email = self.request.session.get('email','')
+        email = self.request.session.get('email', '')
         self.cleaned_data['email'] = email
-        code = self.request.session.get(email,'')
+        code = self.request.session.get(email, '')
         verification_code = self.cleaned_data.get('verification_code').strip()
         if verification_code == '':
             raise forms.ValidationError('验证码不能为空')
@@ -353,6 +334,7 @@ class ForgetPasswordForm(forms.Form):
             raise forms.ValidationError('填写验证码超时，请重新获取验证码')
         return verification_code
 
+
 class ChangeForgetPasswordForm(forms.Form):
     new_password = forms.CharField(
         label='新密码',
@@ -360,22 +342,19 @@ class ChangeForgetPasswordForm(forms.Form):
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '8-23位字母开头的大小写字母和数字组合'}),
         error_messages={
-            'required': '新密码不能为空!',
-        },
-        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')]
-    )
+            'required': '新密码不能为空!', },
+        validators=[RegexValidator('^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,18}$', '必须是字母开头的大小写字母和数字组合')])
     new_password_again = forms.CharField(
         label='重复一次新密码',
         min_length=8,
         max_length=20,
         widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': '请再次输入新密码'}),
         error_messages={
-            'required': '密码不能为空!',
-        },
-    )
+            'required': '密码不能为空!', },)
+
     def clean_new_password_again(self):
-        new_password = self.cleaned_data.get('new_password','')
-        new_password_again = self.cleaned_data.get('new_password_again','')
+        new_password = self.cleaned_data.get('new_password', '')
+        new_password_again = self.cleaned_data.get('new_password_again', '')
         if new_password != new_password_again:
             raise forms.ValidationError('两次输入的密码不一致,请重新输入')
         return new_password_again

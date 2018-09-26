@@ -7,11 +7,13 @@ from read_statistics.models import GetReadCount,OneDayReadCount
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 
+
 class BlogType(models.Model):
     type_name = models.CharField(max_length=50)
 
     def __str__(self):
         return self.type_name
+
 
 class Blog(models.Model,GetReadCount):
     title = models.CharField(max_length=50)

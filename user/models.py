@@ -3,16 +3,18 @@ from django.contrib.auth.models import User
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 
+
 class Profile(models.Model):
-    nickname = models.CharField('昵称',max_length=20)
-    avatar = ProcessedImageField(verbose_name='头像',
-                               upload_to='avatar_imgs/%y/%m/%d',
-                                processors=[ResizeToFill(80,80)],
-                               default='avatar_imgs/default.jpg')
-    user = models.OneToOneField(User,on_delete=models.CASCADE)
+    nickname = models.CharField('昵称', max_length=20)
+    avatar = ProcessedImageField(
+        verbose_name='头像',
+        upload_to='avatar_imgs/%y/%m/%d',
+        processors=[ResizeToFill(80, 80)],
+        default='avatar_imgs/default.jpg')
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     def __str__(self):
-        return '<Profile:%s for %s>' % (self.nickname,self.user.username)
+        return '<Profile:%s for %s>' % (self.nickname, self.user.username)
 
 
 def get_nickname(self):
@@ -22,13 +24,16 @@ def get_nickname(self):
     else:
         return ''
 
+
 def get_nickname_or_username(self):
     if Profile.objects.filter(user=self).exists():
         profile = Profile.objects.get(user=self)
         return profile.nickname
     else:
         return self.username
-def get_avatar_url(self):  #利用这个方法可以在新用户没有头像的时候返回默认的头像
+
+
+def get_avatar_url(self):  # 利用这个方法可以在新用户没有头像的时候返回默认的头像
     if Profile.objects.filter(user=self).exists():
         profile = Profile.objects.get(user=self)
         return profile.avatar.url

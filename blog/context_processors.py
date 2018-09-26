@@ -1,10 +1,12 @@
 from django.db.models import Count
-from .models import Blog,BlogType
+from .models import Blog, BlogType
+
 
 def blog_types(request):
     # 获取博客分类
     blog_types = BlogType.objects.annotate(blog_count=Count('blog'))
     return {'blog_types':blog_types}
+
 
 def blog_dates(request):
     # 获取日期归档以及对应的博客数量

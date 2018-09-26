@@ -20,17 +20,17 @@ def send(email_title, user_email, email, html_message):
 
 
 class Comment(models.Model):
-    content_type = models.ForeignKey(ContentType,on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
-    content_object = GenericForeignKey('content_type','object_id')  # 评论对象
+    content_object = GenericForeignKey('content_type', 'object_id')  # 评论对象
 
-    user = models.ForeignKey(User,related_name='comments',on_delete=models.CASCADE) # 评论人
-    comment_time = models.DateTimeField(auto_now_add=True) # 评论时间
-    text = models.TextField() # 评论内容
+    user = models.ForeignKey(User,related_name='comments', on_delete=models.CASCADE)  # 评论人
+    comment_time = models.DateTimeField(auto_now_add=True)  # 评论时间
+    text = models.TextField()  # 评论内容
 
-    root = models.ForeignKey('self',related_name='root_comment',on_delete=models.CASCADE,null=True)     # 顶级评论
-    parent = models.ForeignKey('self',related_name='parent_comment',on_delete=models.CASCADE,null=True) # 上级评论
-    reply_to = models.ForeignKey(User,related_name='replies',on_delete=models.CASCADE,null=True)        # 上级评论的作者
+    root = models.ForeignKey('self', related_name='root_comment', on_delete=models.CASCADE, null=True)     # 顶级评论
+    parent = models.ForeignKey('self', related_name='parent_comment', on_delete=models.CASCADE, null=True)  # 上级评论
+    reply_to = models.ForeignKey(User, related_name='replies', on_delete=models.CASCADE, null=True)        # 上级评论的作者
 
     def __str__(self):
         return self.text
@@ -52,7 +52,7 @@ class Comment(models.Model):
             context['email_text'] = self.text + url
             content = render_to_string('comment/send_email.html', context)
             thread = ThreadPoolExecutor(2)
-            thread.submit(send,(email_title),(settings.EMAIL_HOST_USER),(email),(content))
+            thread.submit(send, (email_title), (settings.EMAIL_HOST_USER), (email), (content))
             thread.shutdown(wait=False)
 
     class Meta:
