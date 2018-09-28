@@ -11,7 +11,7 @@
 ---
 1. 克隆本项目到本地
 2. 在settings.py所在的目录新建base_settings.py
-3. 在新建的base_settings.py内写入以下内容：
+3. 在新建的base_settings.py内写入以下内容：(记得在本地mysql数据库创建myblog数据库)
 
     ```
     # 发送邮件设置
@@ -37,4 +37,6 @@
         }
     }
     ```
-4.启动项目即可
+4.命令行输入：pip freeze > requirments.txt
+5.中途会报错提示不能安装mysqlclient，去 https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient 下载对应pyhon版本的mysqlclient,比如你用的是python3.6，则下载mysqlclient‑1.3.13‑cp36‑cp36m‑win32.whl,然后放入myblog项目根目录，输入命令pip install mysqlclient‑1.3.13‑cp36‑cp36m‑win32.whl
+5.启动项目即可
