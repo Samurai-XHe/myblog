@@ -4,7 +4,7 @@
 ### 关于本博客
 - - -
 * 使用Django2.0 + BootStrap4
-* 部署在pythonanywhere
+* 部署在pythonanywhere(因为是免费的原因所以有很多限制，比如无法发出邮件，这样就导致不能在线注册，只有克隆到本地或付费后才能正常发邮件)
 * 图标库使用Font Awesome
 
 ### 使用
