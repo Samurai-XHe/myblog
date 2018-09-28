@@ -1,4 +1,4 @@
-本博客是跟随杨士航的教程写出的个人博客网站
+本博客是跟随[杨士航](http://yshblog.com/)的教程写出的个人博客网站
 
 博客主页 https://xhe.pythonanywhere.com/
 ### 关于本博客
