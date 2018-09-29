@@ -37,8 +37,10 @@
         }
     }
     ```
-4.命令行输入：pip freeze > requirments.txt
+4.在settings.py中引入base_settings.py的内容：
+>   from .base_settings import *
+5.命令行输入：pip freeze > requirments.txt
 
-5.中途会报错提示不能安装mysqlclient，去 https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient 下载对应pyhon版本的mysqlclient,比如你用的是python3.6，则下载mysqlclient‑1.3.13‑cp36‑cp36m‑win32.whl,然后放入myblog项目根目录，输入命令pip install mysqlclient‑1.3.13‑cp36‑cp36m‑win32.whl
+6.中途会报错提示不能安装mysqlclient，去 https://www.lfd.uci.edu/~gohlke/pythonlibs/#mysqlclient 下载对应pyhon版本的mysqlclient,比如你用的是python3.6，则下载mysqlclient‑1.3.13‑cp36‑cp36m‑win32.whl,然后放入myblog项目根目录，输入命令pip install mysqlclient‑1.3.13‑cp36‑cp36m‑win32.whl
 
-6.启动项目即可
+7.启动项目即可
