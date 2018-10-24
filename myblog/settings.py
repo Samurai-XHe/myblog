@@ -79,6 +79,7 @@ TEMPLATES = [
                 'read_statistics.context_processors.month_hot_blogs',
                 'blog.context_processors.blog_types',
                 'blog.context_processors.blog_dates',
+                'django.template.context_processors.media',
             ],
         },
     },

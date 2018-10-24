@@ -37,8 +37,5 @@ class Blog(models.Model,GetReadCount):
     def get_email(self):
         return self.author.email
 
-    def get_cover(self):
-        return self.cover.url
-
     class Meta:
         ordering = ['-created_time']

@@ -71,7 +71,7 @@ def blog_detail(request, pk):
     return render(request,'blog/blog_detail.html', context) # 响应
 
 
-class blog_detail_0(DetailView):  #还不如原来的方法，通用视图是django最没用的一个功能
+class blog_detail_0(DetailView):
     model = Blog
     template_name = 'blog/blog_detail.html'
     context_object_name = 'blog'
