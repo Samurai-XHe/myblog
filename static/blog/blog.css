@@ -1,0 +1,12 @@
+a,a:hover {
+    text-decoration: none;
+}
+#content {
+    min-height: 350px;
+}
+.comment {
+    background-color: rgba(110, 110, 110, 0.11);
+}
+.huifu {
+    background-color: rgba(198, 198, 198, 0.42);
+}
