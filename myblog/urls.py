@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-from django.conf.urls.static import static
+# from django.conf.urls.static import static
 from django.views import generic
+from django.views.static import serve
 
 urlpatterns = [
     path('admin/', admin.site.urls,name='admin'),
@@ -26,7 +27,10 @@ urlpatterns = [
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path('comment/', include('comment.urls')),
     path('likes/', include('likes.urls')),
+    path('media/', serve, {'document_root': settings.MEDIA_ROOT}),
+    path('static/', serve, {'document_root': settings.STATIC_ROOT}),
+
     # 通用视图，Templateview连views函数都不用写,因为他只是单纯的返回一个静态网页，不需要函数对其处理
     path('demo1/', generic.TemplateView.as_view(template_name='demo1.html'), name='demo1'),
 ]
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

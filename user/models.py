@@ -36,7 +36,7 @@ def get_nickname_or_username(self):
 def get_avatar_url(self):  # 利用这个方法可以在新用户没有头像的时候返回默认的头像
     if Profile.objects.filter(user=self).exists():
         profile = Profile.objects.get(user=self)
-        return profile.avatar.url
+        return profile.avatar
     else:
         return 'avatar_imgs/default.jpg'
 
