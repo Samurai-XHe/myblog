@@ -28,11 +28,8 @@
                 <ul id="title_right" class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item">                                                     {# user.profile.avatar.url #}
-<<<<<<< HEAD
-                            <img id="title_avatar" class="img-fluid rounded-circle" src="{{ MEDIA_URL }}{{ user.get_avatar_url }}" alt="avatar">
-=======
                             <img id="title_avatar" class="img-fluid rounded-circle" src="{{ MEDIA_URL }}{{ user.profile.avatar }}" alt="avatar">
->>>>>>> 9f26c67014791f8c0dea3d818687b2aca966d685
+
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
