@@ -12,7 +12,7 @@
 </head>
 <body>
     <section id="index-title">
-        <nav class="navbar navbar-expand-lg bg-dark text-light fixed-top border-bottom-0 p-2 rounded">
+        <nav class="navbar navbar-expand-lg bg-primary fixed-top border-bottom-0 p-2 rounded">
             <a class="navbar-brand text-light" href="{% url 'blog_list' %}">
                 <i class="fa fa-paper-plane" aria-hidden="true"></i>&nbsp;Blog
             </a>
@@ -28,7 +28,11 @@
                 <ul id="title_right" class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item">                                                     {# user.profile.avatar.url #}
+<<<<<<< HEAD
                             <img id="title_avatar" class="img-fluid rounded-circle" src="{{ MEDIA_URL }}{{ user.get_avatar_url }}" alt="avatar">
+=======
+                            <img id="title_avatar" class="img-fluid rounded-circle" src="{{ MEDIA_URL }}{{ user.profile.avatar }}" alt="avatar">
+>>>>>>> 9f26c67014791f8c0dea3d818687b2aca966d685
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-light" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -66,13 +70,13 @@
                 <div class="col-md-3 month-hot mt-5">
                     <div class="card">
                         <div class="card-header bg-info text-light">
-                            <i class="fa fa-industry" aria-hidden="true"></i>&nbsp;本月热门博客
+                            <i class="fa fa-industry" aria-hidden="true"></i>&nbsp;本周热门博客
                         </div>
                         <ul class="list-group list-group-flush">
-                            {% for blog in month_hot_blogs %}
-                                <a class="list-group-item" href="{% url 'blog_detail' blog.pk %}">
+                            {% for blog in week_hot_blogs %}
+                                <a class="list-group-item text-primary" href="{% url 'blog_detail' blog.pk %}">
                                     {{ blog.title|truncatechars:13 }}
-                                    <span class="badge badge-pill badge-primary float-right">阅读{{ blog.month_hot_sum }}</span>
+                                    <span class="badge badge-pill badge-primary float-right">阅读{{ blog.week_hot_sum }}</span>
                                 </a>
                             {% empty %}
                                 <li class="list-group-item">暂无热门博客</li>
@@ -86,7 +90,7 @@
                         </div>
                         <ul class="list-group list-group-flush">
                             {% for blog_type in blog_types %}
-                                <a class="list-group-item" href="{% url 'blogs_with_type' blog_type.pk %}">
+                                <a class="list-group-item text-primary" href="{% url 'blogs_with_type' blog_type.pk %}">
                                     {{ blog_type.type_name }}
                                     <span class="badge badge-pill badge-primary float-right">{{ blog_type.blog_count }}</span>
                                 </a>
@@ -102,7 +106,7 @@
                         </div>
                         <ul class="list-group list-group-flush">
                             {% for blog_date,blog_count in blog_dates.items %}
-                                <a class="list-group-item" href="{% url 'blogs_with_date' blog_date.year blog_date.month %}">
+                                <a class="list-group-item text-primary" href="{% url 'blogs_with_date' blog_date.year blog_date.month %}">
                                     {{ blog_date|date:'Y年m月' }}
                                     <span class="badge badge-pill badge-primary float-right">{{ blog_count }}</span>
                                 </a>
